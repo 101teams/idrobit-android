@@ -56,11 +56,11 @@ fun RegisterScreen(
     val view = LocalView.current
     Helper().setNotifBarColor(view, window, White.toArgb(),true)
 
-    val name = remember { mutableStateOf("") }
-    val surname = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val cpassword = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf<String>("") }
+    val surname = remember { mutableStateOf<String>("") }
+    val email = remember { mutableStateOf<String>("") }
+    val password = remember { mutableStateOf<String>("") }
+    val cpassword = remember { mutableStateOf<String>("") }
     val checked = remember { mutableStateOf(false) }
 
     Column(

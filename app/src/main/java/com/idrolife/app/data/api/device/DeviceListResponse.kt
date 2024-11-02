@@ -100,6 +100,9 @@ data class DevicesItem(
 	@SerialName("status")
 	val status: String? = null,
 
+	@SerialName("last_heard")
+	val lastHeard: String? = null,
+
 	var responseDateTime: String? = null,
 )
 

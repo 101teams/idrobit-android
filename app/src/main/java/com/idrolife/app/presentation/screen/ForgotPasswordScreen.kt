@@ -47,7 +47,7 @@ fun ForgotPasswordScreen(
     val view = LocalView.current
     Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),true)
 
-    val email = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf<String>("") }
 
     Column(
         modifier = Modifier

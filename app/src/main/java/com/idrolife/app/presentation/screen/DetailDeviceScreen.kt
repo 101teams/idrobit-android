@@ -34,6 +34,7 @@ fun DetailDeviceScreen(
     navController: NavController,
     deviceID: String,
     deviceName: String,
+    deviceCode: String,
 ) {
     val context = LocalContext.current
 
@@ -92,7 +93,7 @@ fun DetailDeviceScreen(
                 stringResource(id = R.string.irrigation),
                 R.drawable.ic_arrow_up_white,
                 onClick = {
-                    navController.navigate(Screen.IrrigationDevice.withArgs(deviceID))
+                    navController.navigate(Screen.IrrigationDevice.withArgs(deviceID, deviceCode))
                 },
                 null,
                 null,

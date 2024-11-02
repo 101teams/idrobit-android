@@ -5,7 +5,9 @@ import com.idrolife.app.data.api.UnauthorizedException
 import com.idrolife.app.data.api.UnprocessableEntityException
 import com.idrolife.app.data.api.device.DeviceByIDResponse
 import com.idrolife.app.data.api.device.DeviceListResponse
+import com.idrolife.app.data.api.irrigation.IrrigationConfigDeviceGeoRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowData
+import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowResponse
 import com.idrolife.app.data.api.sensor.SensorMeteostatResponse
 import com.idrolife.app.data.api.sensor.SensorSatstatResponse
@@ -149,17 +151,8 @@ class DeviceServiceImpl(
         }
     }
 
-    override suspend fun getIrrigationConfigNominalFlow(deviceCode: String): Pair<IrrigationConfigNominalFlowResponse?, String> {
+    override suspend fun getIrrigationConfigNominalFlow(deviceCode: String, fields: String, measurement: String): Pair<IrrigationConfigNominalFlowResponse?, String> {
         return try {
-            var fields =""
-            for (i in 2000..3151) {
-                if (i != 2000) {
-                    fields += ","
-                }
-                fields += "S${i}"
-            }
-            val measurement = "EVCONFIG"
-
             val response = client.get { url("${HttpRoutes.STAT}?fields=${fields}&measurement=${measurement}&device_code=${deviceCode}") }.bodyAsText()
             val json = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
             val jsonObject = json.parseToJsonElement(response).jsonObject
@@ -174,7 +167,7 @@ class DeviceServiceImpl(
             val _measurement = dataObject["_measurement"]?.jsonPrimitive?.content ?: ""
             val device = dataObject["device"]?.jsonPrimitive?.content ?: ""
 
-            val dynamicFields = dataObject.filterKeys { it.startsWith("S") }
+            val dynamicFields = dataObject
                 .mapValues { it.value.jsonPrimitive.content }
 
             val data = IrrigationConfigNominalFlowData(
@@ -202,6 +195,87 @@ class DeviceServiceImpl(
             Pair(null, "Error 5xx: ${e.response.status.description}")
         } catch (e: Exception) {
             Pair(null, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun postIrrigationConfigNominalFlow(
+        deviceCode: String,
+        command: String,
+        data: Map<String, String>
+    ): Pair<Boolean, String> {
+        val request = IrrigationConfigNominalFlowRequest(
+            command = command,
+            payload = data
+        )
+
+        return try {
+            client.post {
+                url(HttpRoutes.DEVICE_CONTROL + "/${deviceCode}")
+                contentType(Json)
+                setBody(request)
+            }
+            Pair(true, "")
+        } catch (e: UnprocessableEntityException) {
+            Pair(false, e.message)
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error: ${e.message}")
+        }
+    }
+
+    override suspend fun postIrrigationConfigRawControl(
+        deviceCode: String,
+        command: String,
+        data: Map<String, String>
+    ): Pair<Boolean, String> {
+        val request = IrrigationConfigNominalFlowRequest(
+            command = command,
+            payload = data
+        )
+
+        return try {
+            client.post {
+                url(HttpRoutes.DEVICE_RAW_CONTROL + "/${deviceCode}")
+                contentType(Json)
+                setBody(request)
+            }
+            Pair(true, "")
+        } catch (e: UnprocessableEntityException) {
+            Pair(false, e.message)
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error: ${e.message}")
+        }
+    }
+
+    override suspend fun postIrrigationConfigDeviceGeo(data: IrrigationConfigDeviceGeoRequest): Pair<Boolean, String> {
+        return try {
+            client.post {
+                url(HttpRoutes.DEVICE_GEO)
+                contentType(Json)
+                setBody(data)
+            }
+            Pair(true, "")
+        } catch (e: UnprocessableEntityException) {
+            Pair(false, e.message)
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error: ${e.message}")
         }
     }
 }

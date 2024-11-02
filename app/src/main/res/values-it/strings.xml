@@ -3,7 +3,7 @@
     <string name="app_name">Idrolife</string>
     <string name="done">Fatto</string>
     <string name="bt_location_request">Attenzione</string>
-    <string name="bt_location_request_usage">Devi attivare il Bluetooth e la Posizione di questo dispositivo per accedere al dispositivo BLE</string>
+    <string name="bt_location_request_usage">Devi attivare il Posizione di questo dispositivo</string>
 
     <string name="sensors">Sensori</string>
     <string name="irrigation">Irrigazione</string>
@@ -62,4 +62,52 @@
     <string name="ev_configuration">EVs Configuration</string>
     <string name="station_management">Gestione Stazioni</string>
     <string name="save">Salva</string>
+
+<!--    start need translation-->
+    <string name="number_of_stations">Number of stations</string>
+    <string name="max_active_prog">Maximum Active Program</string>
+    <string name="flow_off">Flow Off</string>
+    <string name="flow_off_tolerance">Flow Off Tolerance</string>
+    <string name="entry">Entry</string>
+    <string name="plant_operation_status">Plant Operation Status</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="ev_master">EV Master</string>
+    <string name="ec_command">EC Command</string>
+    <string name="pressure">Pressure</string>
+    <string name="delay_alarm_time_low_pressure">Delay Alarm Time Low Pressure</string>
+    <string name="delay_alarm_time_high_pressure">Delay Alarm Time High Pressure</string>
+    <string name="clean_memory">Clean Memory</string>
+    <string name="delay">Delay</string>
+    <string name="pump_deactived_delay">Pump Deactived Delay</string>
+    <string name="flow_alarm_delay">Flow Alarm Delay</string>
+    <string name="delay_between_ms_and_ev">Delay Between MS and EV</string>
+    <string name="humidity">Humidity</string>
+    <string name="solar_irradiation">Solar Irradiation</string>
+    <string name="wind_sensor">Wind Sensor</string>
+    <string name="pulses">Pulses</string>
+    <string name="not_used">Not Used</string>
+    <string name="normally_opened">Normally Opened</string>
+    <string name="normally_closed">Normally Closed</string>
+    <string name="emergency">Emergency</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="high_flow">High Flow</string>
+    <string name="normal_flow">High Flow</string>
+    <string name="low_flow">High Flow</string>
+    <string name="min_pressure_more_than_max_alert">Min pressure cannot be more than max pressure</string>
+    <string name="opened_circuit_ampere">Opened Circuit Ampere</string>
+    <string name="acknowledge_pulse_time">Acknowledge Pulse Time</string>
+    <string name="minimum_ampere_threshold_in_self_search">Minimum Ampere threshold in self-search</string>
+    <string name="activation_delay_between_master_ev_and_first_ev">Activation delay between Master EV and first EV</string>
+    <string name="activation_delay_between_two_evs">Activation delay between two EVs</string>
+    <string name="ev_holding_voltage">EV holding voltage</string>
+    <string name="trigger_pulse_time">Trigger pulse time</string>
+    <string name="refresh">Refresh</string>
+    <string name="delete">Delete</string>
+    <string name="station_number">Station Number</string>
+    <string name="id_serial">ID Serial</string>
+    <string name="group">Group</string>
+    <string name="get_current_location">Get Current Location</string>
+    <string name="location_not_found">Location Not Found</string>
+    <string name="failed_get_location">Failed get location</string>
 </resources>

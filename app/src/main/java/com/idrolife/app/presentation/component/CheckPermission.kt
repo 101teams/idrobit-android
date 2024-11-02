@@ -21,6 +21,6 @@ fun CheckPermission(
         // If all permissions are granted, then show screen with the feature enabled
         onPermissionGranted()
     } else {
-        onPermissionDenied("App need bluetooth to function!")
+        onPermissionDenied("App need location to function!")
     }
 }

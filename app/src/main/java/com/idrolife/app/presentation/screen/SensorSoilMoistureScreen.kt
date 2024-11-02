@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -130,9 +129,7 @@ fun SensorSoilMoistureScreen(
 
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult) {
-                    Log.d("adaaaaa","ssssss")
                     for (location in locationResult.locations) {
-                        Log.d("adaaaaa","${location.latitude} ${location.longitude}")
                         locationState.value = location
                     }
                 }

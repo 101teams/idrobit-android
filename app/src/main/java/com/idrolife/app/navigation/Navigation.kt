@@ -13,6 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.idrolife.app.presentation.screen.DetailDeviceScreen
 import com.idrolife.app.presentation.screen.ForgotPasswordScreen
+import com.idrolife.app.presentation.screen.IrrigationConfigAdvanceConfigScreen
+import com.idrolife.app.presentation.screen.IrrigationConfigEVConfigScreen
+import com.idrolife.app.presentation.screen.IrrigationConfigEVRadioStatusScreen
+import com.idrolife.app.presentation.screen.IrrigationConfigGeneralSettingScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigNominalFlowScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigScreen
 import com.idrolife.app.presentation.screen.IrrigationDeviceScreen
@@ -112,13 +116,17 @@ fun Navigation() {
         }
 
         composable(
-            route = Screen.DetailDevice.route + "/{deviceID}/{deviceName}",
+            route = Screen.DetailDevice.route + "/{deviceID}/{deviceName}/{deviceCode}",
             arguments = listOf(
                 navArgument("deviceID") {
                     type = NavType.StringType
                     nullable = false
                 },
                 navArgument("deviceName") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
                     type = NavType.StringType
                     nullable = false
                 },
@@ -130,7 +138,8 @@ fun Navigation() {
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceName = it.arguments?.getString("deviceName") ?: ""
-            DetailDeviceScreen(navController, deviceID, deviceName)
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            DetailDeviceScreen(navController, deviceID, deviceName, deviceCode)
         }
 
         composable(
@@ -168,9 +177,13 @@ fun Navigation() {
         }
 
         composable(
-            route = Screen.IrrigationDevice.route + "/{deviceID}",
+            route = Screen.IrrigationDevice.route + "/{deviceID}/{deviceCode}",
             arguments = listOf(
                 navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
                     type = NavType.StringType
                     nullable = false
                 },
@@ -181,13 +194,18 @@ fun Navigation() {
             popEnterTransition = popEnterTransition
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
-            IrrigationDeviceScreen(navController, deviceID)
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationDeviceScreen(navController, deviceID, deviceCode)
         }
 
         composable(
-            route = Screen.IrrigationConfig.route + "/{deviceID}",
+            route = Screen.IrrigationConfig.route + "/{deviceID}/{deviceCode}",
             arguments = listOf(
                 navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
                     type = NavType.StringType
                     nullable = false
                 },
@@ -198,7 +216,8 @@ fun Navigation() {
             popEnterTransition = popEnterTransition
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
-            IrrigationConfigScreen(navController, deviceID)
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationConfigScreen(navController, deviceID, deviceCode)
         }
 
         composable(
@@ -216,6 +235,79 @@ fun Navigation() {
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             IrrigationConfigNominalFlowScreen(navController, deviceID)
+        }
+
+        composable(
+            route = Screen.IrrigationConfigGeneralSetting.route + "/{deviceID}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            IrrigationConfigGeneralSettingScreen(navController, deviceID)
+        }
+
+        composable(
+            route = Screen.IrrigationConfigAdvanceConfig.route + "/{deviceID}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            IrrigationConfigAdvanceConfigScreen(navController, deviceID)
+        }
+
+        composable(
+            route = Screen.IrrigationConfigEVRadioStatus.route + "/{deviceID}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            IrrigationConfigEVRadioStatusScreen(navController, deviceID)
+        }
+
+        composable(
+            route = Screen.IrrigationConfigEVConfig.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationConfigEVConfigScreen(navController, deviceID, deviceCode)
         }
     }
 }

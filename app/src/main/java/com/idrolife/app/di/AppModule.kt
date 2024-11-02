@@ -27,9 +27,11 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
+@OptIn(ExperimentalSerializationApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -95,7 +97,10 @@ object AppModule {
             }
 
             install(ContentNegotiation) {
-                json()
+                json( Json {
+                    ignoreUnknownKeys = true
+                    explicitNulls = false
+                })
             }
 
             install(Auth) {

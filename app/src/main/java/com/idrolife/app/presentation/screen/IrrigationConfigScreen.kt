@@ -47,7 +47,8 @@ import com.idrolife.app.utils.Helper
 @Composable
 fun IrrigationConfigScreen(
     navController: NavController,
-    deviceID: String
+    deviceID: String,
+    deviceCode: String
 ) {
     val context = LocalContext.current
 
@@ -60,7 +61,7 @@ fun IrrigationConfigScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),false)
+                Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),true)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -116,16 +117,16 @@ fun IrrigationConfigScreen(
                     navController.navigate(Screen.IrrigationConfigNominalFlow.withArgs(deviceID))
                 }
                 IrrigationConfigButton(title = context.getString(R.string.general_setting)) {
-
+                    navController.navigate(Screen.IrrigationConfigGeneralSetting.withArgs(deviceID))
                 }
                 IrrigationConfigButton(title = context.getString(R.string.advanced_configuration)) {
-
+                    navController.navigate(Screen.IrrigationConfigAdvanceConfig.withArgs(deviceID))
                 }
                 IrrigationConfigButton(title = context.getString(R.string.ev_radio_status)) {
-
+                    navController.navigate(Screen.IrrigationConfigEVRadioStatus.withArgs(deviceID))
                 }
                 IrrigationConfigButton(title = context.getString(R.string.ev_configuration)) {
-
+                    navController.navigate(Screen.IrrigationConfigEVConfig.withArgs(deviceID, deviceCode))
                 }
                 IrrigationConfigButton(title = context.getString(R.string.station_management)) {
 

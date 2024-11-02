@@ -315,7 +315,7 @@ fun Tab1(navController: NavController){
                         DeviceStatusCard(
                             data = device,
                             onClick = {
-                                navController.navigate(Screen.DetailDevice.withArgs(device?.id.toString(), device?.name ?: ""))
+                                navController.navigate(Screen.DetailDevice.withArgs(device?.id.toString(), device?.name ?: "", device?.code ?: ""))
                             }
                         )
                     }

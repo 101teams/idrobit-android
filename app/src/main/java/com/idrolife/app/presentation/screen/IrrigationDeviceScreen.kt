@@ -35,7 +35,8 @@ import com.idrolife.app.utils.Helper
 @Composable
 fun IrrigationDeviceScreen(
     navController: NavController,
-    deviceID: String
+    deviceID: String,
+    deviceCode: String,
 ) {
     val context = LocalContext.current
 
@@ -104,7 +105,7 @@ fun IrrigationDeviceScreen(
                 stringResource(id = R.string.irrigation_configuration),
                 R.drawable.ic_arrow_up_green,
                 onClick = {
-                    navController.navigate(Screen.IrrigationConfig.withArgs(deviceID))
+                    navController.navigate(Screen.IrrigationConfig.withArgs(deviceID, deviceCode))
                 },
                 Green2,
                 Green2,

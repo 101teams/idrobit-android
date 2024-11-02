@@ -114,7 +114,7 @@ fun DeviceStatusCard(
                     Spacer(modifier = Modifier.weight(1f))
 
                     // Alert Icon Placeholder
-                    if (data.isAlarm != null && data.isAlarm) {
+                    if (data.isAlarmDevice != null && data.isAlarmDevice.toInt() > 0) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_alert_red),
                             contentDescription = "Center Image",

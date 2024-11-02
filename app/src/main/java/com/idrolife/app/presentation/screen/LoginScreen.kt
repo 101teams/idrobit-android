@@ -66,8 +66,8 @@ fun LoginScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf<String>("") }
+    val password = remember { mutableStateOf<String>("") }
 
     val window = (context as Activity).window
     val view = LocalView.current
@@ -85,8 +85,8 @@ fun LoginScreen(
 
     fun login() {
         val request = AuthRequest(
-            email = email.value,
-            password = password.value
+            email = email.value ?: "",
+            password = password.value ?: ""
         )
 
         if (request.email.isBlank()) {
@@ -246,7 +246,6 @@ fun LoginScreen(
                     modifier = Modifier.weight(1f) // Membuat divider kanan memenuhi ruang
                 )
             }
-
 
             Button(
                 modifier = Modifier

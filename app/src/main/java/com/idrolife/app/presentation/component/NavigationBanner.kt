@@ -195,7 +195,7 @@ fun NavigationBanner2(
                             }
 
                             // Alert Icon Placeholder
-                            if (data?.isAlarm != null && data.isAlarm) {
+                            if (data?.isAlarmDevice != null && data.isAlarmDevice.toIntOrNull() != null && data.isAlarmDevice.toInt() > 0) {
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_alert_red),
                                     contentDescription = "Center Image",
@@ -317,7 +317,7 @@ fun NavigationBanner3(
                     }
 
                     // Alert Icon Placeholder
-                    if (data?.isAlarm != null && data.isAlarm) {
+                    if (data?.isAlarmDevice != null && data.isAlarmDevice.toIntOrNull() != null && data.isAlarmDevice.toInt() > 0) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_alert_red),
                             contentDescription = "Center Image",

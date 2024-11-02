@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -26,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,10 +34,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -70,6 +72,7 @@ import com.idrolife.app.theme.Green
 import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
+import kotlinx.coroutines.launch
 
 @Composable
 fun IrrigationConfigNominalFlowScreen(
@@ -82,12 +85,13 @@ fun IrrigationConfigNominalFlowScreen(
     val view = LocalView.current
 
     val viewModel = hiltViewModel<DeviceViewModel>()
+    val scope = rememberCoroutineScope()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),false)
+                Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),true)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -140,8 +144,28 @@ fun IrrigationConfigNominalFlowScreen(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            items(viewModel.irrigationConfigNominalFlow.value.filter { it.evSerial != "FFFFFF" }) {
-                NominalFlowItem(it)
+            items(viewModel.irrigationConfigNominalFlow.value.size) {index ->
+                var item = viewModel.irrigationConfigNominalFlow.value[index]
+
+                if (item.evSerial != "FFFFFF") {
+                    try {
+                        if (item.nominalValue.toInt() >= 6000) {
+                            item.auto = true
+                        }
+                    } catch (e: Exception) {}
+
+                    NominalFlowItem(item,
+                        onAuto = {
+                            viewModel.irrigationConfigNominalFlow.value[index].auto = it
+                            if (it) {
+                                viewModel.irrigationConfigNominalFlow.value[index].nominalValue = "6000"
+                            }
+                        },
+                        onValueChanged = {
+                            viewModel.irrigationConfigNominalFlow.value[index].nominalValue = it
+                        }
+                    )
+                }
             }
         }
 
@@ -158,11 +182,53 @@ fun IrrigationConfigNominalFlowScreen(
                     .padding(top = 12.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {
+                    scope.launch {
+                        viewModel.postDataLoading.value = true
+                        val data = mutableMapOf<String, String>()
 
+                        var evIndex = 2005
+
+                        for (i in viewModel.irrigationConfigNominalFlow.value) {
+                            data["S${evIndex}"] = if (i.nominalValue == "") {
+                                "0"
+                            } else {
+                                i.nominalValue
+                            }
+
+                            evIndex += 6
+                        }
+
+                        val chunkItemSize = 60
+                        var sendData = mutableMapOf<String, String>()
+                        data.onEachIndexed { index, entry ->
+                            sendData[entry.key] = entry.value
+
+                            if ((index + 1) % chunkItemSize == 0 || index+1 == data.size) {
+                                val resp = viewModel.postIrrigationConfigNominalFlow(
+                                    viewModel.selectedDevice.value?.code ?: "",
+                                    sendData,
+                                )
+                                sendData = mutableMapOf()
+                            }
+                        }
+
+                        viewModel.postDataLoading.value = false
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Green),
             ) {
-                Text(stringResource(id = R.string.save), style = MaterialTheme.typography.button, fontSize = 18.sp)
+                if (viewModel.postDataLoading.value) {
+                    CircularProgressIndicator(
+                        color = White,
+                        strokeCap = StrokeCap.Round,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier
+                            .width(18.dp)
+                            .height(18.dp)
+                    )
+                } else {
+                    Text(stringResource(id = R.string.save), style = MaterialTheme.typography.button, fontSize = 18.sp)
+                }
             }
         }
     }
@@ -171,9 +237,11 @@ fun IrrigationConfigNominalFlowScreen(
 @Composable
 fun NominalFlowItem(
     data: IrrigationConfigNominalFlowDataProduct,
+    onAuto: (Boolean) -> Unit,
+    onValueChanged: (String) -> Unit,
 ) {
-    val nominalValue = remember { mutableStateOf(data.nominalValue ?: "") }
-    val modeAuto = remember { mutableStateOf(data.auto!!) }
+    val nominalValue = remember { mutableStateOf(data.nominalValue) }
+    val modeAuto = remember { mutableStateOf(data.auto) }
 
     val switchPadding by animateDpAsState(targetValue = if (modeAuto.value) 70.dp else 0.dp)
     val switchRightPaddingText by animateDpAsState(targetValue = if (modeAuto.value) 8.dp else 0.dp)
@@ -305,7 +373,10 @@ fun NominalFlowItem(
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .padding(4.dp)
-                            .clickable { modeAuto.value = !modeAuto.value },
+                            .clickable {
+                                modeAuto.value = !modeAuto.value
+                                onAuto(modeAuto.value)
+                           },
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
@@ -361,7 +432,10 @@ fun NominalFlowItem(
                             ) {
                                 BasicTextField(
                                     value = nominalValue.value,
-                                    onValueChange = {nominalValue.value = it},
+                                    onValueChange = {
+                                        nominalValue.value = it
+                                        onValueChanged(nominalValue.value)
+                                    },
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .fillMaxWidth(),
