@@ -11,7 +11,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.idrolife.app.presentation.screen.CreatePlantScreen
 import com.idrolife.app.presentation.screen.DetailDeviceScreen
+import com.idrolife.app.presentation.screen.FertigationDeviceScreen
+import com.idrolife.app.presentation.screen.FertigationProgrammationECSettingScreen
+import com.idrolife.app.presentation.screen.FertigationProgrammationScreen
+import com.idrolife.app.presentation.screen.FertigationStatusScreen
 import com.idrolife.app.presentation.screen.ForgotPasswordScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigAdvanceConfigScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigEVConfigScreen
@@ -20,8 +25,18 @@ import com.idrolife.app.presentation.screen.IrrigationConfigGeneralSettingScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigNominalFlowScreen
 import com.idrolife.app.presentation.screen.IrrigationConfigScreen
 import com.idrolife.app.presentation.screen.IrrigationDeviceScreen
+import com.idrolife.app.presentation.screen.IrrigationSettingGeneralParameterScreen
+import com.idrolife.app.presentation.screen.IrrigationSettingScreen
+import com.idrolife.app.presentation.screen.IrrigationSettingSensorManagementScreen
+import com.idrolife.app.presentation.screen.IrrigationStatusIdrosatStatusScreen
+import com.idrolife.app.presentation.screen.IrrigationStatusProgramStatusScreen
+import com.idrolife.app.presentation.screen.IrrigationStatusScreen
+import com.idrolife.app.presentation.screen.IrrigationStatusStationStatusScreen
 import com.idrolife.app.presentation.screen.LoginScreen
 import com.idrolife.app.presentation.screen.MainScreen
+import com.idrolife.app.presentation.screen.ManualEVStartScreen
+import com.idrolife.app.presentation.screen.ManualProgramStartScreen
+import com.idrolife.app.presentation.screen.MapScreen
 import com.idrolife.app.presentation.screen.RegisterScreen
 import com.idrolife.app.presentation.screen.SensorDeviceScreen
 import com.idrolife.app.presentation.screen.SensorSoilMoistureScreen
@@ -308,6 +323,325 @@ fun Navigation() {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceCode = it.arguments?.getString("deviceCode") ?: ""
             IrrigationConfigEVConfigScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationSetting.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationSettingScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationSettingGeneralParameter.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationSettingGeneralParameterScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.CreatePlant.route,
+            arguments = listOf(),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            CreatePlantScreen(navController)
+        }
+
+        composable(
+            route = Screen.IrrigationSettingSensorManagement.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationSettingSensorManagementScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationStatus.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationStatusScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationStatusProgramStatus.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationStatusProgramStatusScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationStatusStationStatus.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationStatusStationStatusScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.IrrigationStatusIdrosatStatus.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            IrrigationStatusIdrosatStatusScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.ManualEVStart.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            ManualEVStartScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.ManualProgramStart.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            ManualProgramStartScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.FertigationDevice.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            FertigationDeviceScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.FertigationProgrammation.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            FertigationProgrammationScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.FertigationProgrammationECSetting.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            FertigationProgrammationECSettingScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.FertigationStatus.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            FertigationStatusScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.Map.route + "/{deviceID}/{deviceCode}",
+            arguments = listOf(
+                navArgument("deviceID") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            val deviceID = it.arguments?.getString("deviceID") ?: ""
+            val deviceCode = it.arguments?.getString("deviceCode") ?: ""
+            MapScreen(navController, deviceID, deviceCode)
         }
     }
 }

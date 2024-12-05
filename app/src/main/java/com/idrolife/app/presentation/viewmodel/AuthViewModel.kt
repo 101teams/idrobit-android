@@ -1,6 +1,5 @@
 package com.idrolife.app.presentation.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -32,6 +31,8 @@ class AuthViewModel @Inject constructor(
             prefManager.setToken(data.token.token)
         }
 
+        prefManager.setUser(data?.user)
+
         _loading.value = false
         return if (data?.token?.token != null) null else text
     }
@@ -43,6 +44,7 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         deviceService.resetToken()
         prefManager.setToken("")
+        prefManager.setUser(null)
     }
 
     fun resetToken() {

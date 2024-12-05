@@ -38,9 +38,9 @@ import com.idrolife.app.presentation.component.Button2Image
 import com.idrolife.app.presentation.component.NavigationBanner2
 import com.idrolife.app.presentation.component.SensorDataItem
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
-import com.idrolife.app.theme.Green2
-import com.idrolife.app.theme.GreenLight2
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary2
+import com.idrolife.app.theme.PrimaryLight2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 
@@ -60,7 +60,7 @@ fun SensorDeviceScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                Helper().setNotifBarColor(view, window, GreenLight2.toArgb(),false)
+                Helper().setNotifBarColor(view, window, PrimaryLight2.toArgb(),false)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -132,7 +132,7 @@ fun SensorDeviceScreen(
                 Divider(
                     modifier = Modifier
                         .padding(top = 12.dp)
-                        .background(Green2)
+                        .background(Primary2)
                 )
 
                 Spacer(modifier = Modifier.padding(top=14.dp))
@@ -145,8 +145,8 @@ fun SensorDeviceScreen(
                     onClick = {
                         navController.navigate(Screen.SensorSoilMoisture.withArgs(deviceID))
                     },
-                    outlineColor = Green2,
-                    fontColor = Green2,
+                    outlineColor = Primary2,
+                    fontColor = Primary2,
                 )
 
                 Row(
@@ -176,7 +176,7 @@ fun SensorDeviceScreen(
                 Divider(
                     modifier = Modifier
                         .padding(top = 12.dp)
-                        .background(Green2)
+                        .background(Primary2)
                 )
 
                 Spacer(modifier = Modifier.padding(top=14.dp))
@@ -189,7 +189,7 @@ fun SensorDeviceScreen(
                 ) {
                     SensorDataItem(
                         value = viewModel.deviceSensorMeteostat.value?.m7 ?: "-",
-                        unit = "W/m2",
+                        unit = "W/m²",
                         name = stringResource(id = R.string.solar_intensity),
                         modifier = Modifier.weight(1f)
                     )
@@ -238,7 +238,7 @@ fun SensorDeviceScreen(
                 Divider(
                     modifier = Modifier
                         .padding(top = 12.dp)
-                        .background(Green2)
+                        .background(Primary2)
                 )
 
                 Spacer(modifier = Modifier.padding(top=14.dp))

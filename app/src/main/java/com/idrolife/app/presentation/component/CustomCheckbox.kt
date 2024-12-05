@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Primary
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -30,14 +30,14 @@ fun CustomCheckbox(
             Checkbox(
                 checked,
                 onCheckedChange = onToggle,
-                colors = CheckboxDefaults.colors(checkedColor = Green),
+                colors = CheckboxDefaults.colors(checkedColor = Primary),
                 modifier = Modifier.scale(0.6f))
         }
 
         if (label != null) {
             Text(
                 label,
-                color = Green,
+                color = Primary,
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(start = 4.dp)
             )

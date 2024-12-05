@@ -15,7 +15,7 @@ data class AuthResponse(
 @Serializable
 data class User(
 
-	@SerialName("remember_me_token")
+	@SerialName("code")
 	val rememberMeToken: String? = null,
 
 	@SerialName("is_email_confirmed")

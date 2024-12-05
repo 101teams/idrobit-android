@@ -1,10 +1,13 @@
 package com.idrolife.app.presentation.screen
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -31,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getString
+import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.idrolife.app.R
@@ -55,11 +59,14 @@ import com.idrolife.app.presentation.component.PasswordInput
 import com.idrolife.app.presentation.viewmodel.AuthViewModel
 import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.Gray
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.GrayVeryLight
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
+import com.idrolife.app.utils.PrefManager
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 fun LoginScreen(
@@ -71,13 +78,31 @@ fun LoginScreen(
 
     val window = (context as Activity).window
     val view = LocalView.current
-    Helper().setNotifBarColor(view, window, Green.toArgb(),false)
+    Helper().setNotifBarColor(view, window, Primary.toArgb(),false)
 
 
     val scope = rememberCoroutineScope()
     val viewModel = hiltViewModel<AuthViewModel>()
     val loading = viewModel.loading.value
     val focusManager = LocalFocusManager.current
+
+    val prefManager = PrefManager(context)
+
+    var selectedLanguage = remember { mutableStateOf("it") }
+    val languages = mutableListOf(
+            Pair(
+                "ITA",
+                "it"
+            ),
+            Pair(
+                "EN",
+                "en"
+            ),
+            Pair(
+                "SR",
+                "sr"
+            ),
+        )
 
     fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(context, message, duration).show()
@@ -159,7 +184,7 @@ fun LoginScreen(
                 style = TextStyle(
                     fontFamily = Manrope,
                     fontWeight = FontWeight.ExtraBold,
-                    color = Green,
+                    color = Primary,
                     fontSize = 32.sp
                 )
             )
@@ -185,11 +210,6 @@ fun LoginScreen(
                 placeholder = stringResource(id = R.string.your_password),
                 binding = password,
                 imeAction = ImeAction.Done,
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        showToast("done")
-                    }
-                )
             )
             
             TextButton(
@@ -214,7 +234,7 @@ fun LoginScreen(
                 onClick = {
                       login()
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
             ) {
                 Text(stringResource(id = R.string.login), style = MaterialTheme.typography.button, fontSize = 18.sp)
             }
@@ -258,9 +278,50 @@ fun LoginScreen(
                     navController.navigate(Screen.Register.route)
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = White,),
-                border = BorderStroke(1.dp, Green),
+                border = BorderStroke(1.dp, Primary),
             ) {
-                Text(stringResource(id = R.string.register), style = MaterialTheme.typography.button, fontSize = 18.sp, color = Green)
+                Text(stringResource(id = R.string.register), style = MaterialTheme.typography.button, fontSize = 18.sp, color = Primary)
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(end = 24.dp, bottom = 24.dp)
+                .background(GrayVeryLight, RoundedCornerShape(8.dp))
+                .align(Alignment.BottomEnd)
+                .padding(4.dp)
+        ) {
+            languages.forEach { language ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .background(
+                            if (selectedLanguage.value == language.second) White else Color.Transparent,
+                            RoundedCornerShape(6.dp)
+                        )
+                        .clickable {
+                            selectedLanguage.value = language.second
+
+                            prefManager.setCurrentLanguage(language.second)
+                            val appLocale = LocaleListCompat.forLanguageTags(language.second)
+                            AppCompatDelegate.setApplicationLocales(appLocale)
+
+                            val config = Configuration(context.resources.configuration)
+                            val locale = Locale(language.second)
+                            Locale.setDefault(locale)
+                            context.resources.updateConfiguration(config, context.resources.displayMetrics)
+                        }
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = language.first,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = Manrope,
+                        color = if (selectedLanguage.value == language.second) Primary else Gray,
+                    )
+                }
             }
         }
     }

@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idrolife.app.R
 import com.idrolife.app.data.api.sensor.RhsItem
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.GreenVeryLight
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.PrimaryVeryLight
 
 
 @Composable
@@ -179,11 +179,11 @@ fun DataTableBody(
                     onClick = {
                           onClick()
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = GreenVeryLight,),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryVeryLight,),
                 ) {
                     if (isLoading) {
                         CircularProgressIndicator(
-                            color = Green,
+                            color = Primary,
                             strokeCap = StrokeCap.Round,
                             strokeWidth = 2.dp,
                             modifier = Modifier
@@ -191,7 +191,7 @@ fun DataTableBody(
                                 .height(12.dp)
                         )
                     } else {
-                        Text(stringResource(id = R.string.set_marker), style = MaterialTheme.typography.button, fontSize = 14.sp, color = Green)
+                        Text(stringResource(id = R.string.set_marker), style = MaterialTheme.typography.button, fontSize = 14.sp, color = Primary)
                     }
                 }
             }

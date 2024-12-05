@@ -27,8 +27,8 @@ import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.component.Button2Image
 import com.idrolife.app.presentation.component.NavigationBanner2
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
-import com.idrolife.app.theme.Green2
-import com.idrolife.app.theme.GreenLight2
+import com.idrolife.app.theme.Primary2
+import com.idrolife.app.theme.PrimaryLight2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 
@@ -49,7 +49,7 @@ fun IrrigationDeviceScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                Helper().setNotifBarColor(view, window, GreenLight2.toArgb(),false)
+                Helper().setNotifBarColor(view, window, PrimaryLight2.toArgb(),false)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -107,8 +107,8 @@ fun IrrigationDeviceScreen(
                 onClick = {
                     navController.navigate(Screen.IrrigationConfig.withArgs(deviceID, deviceCode))
                 },
-                Green2,
-                Green2,
+                Primary2,
+                Primary2,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -119,10 +119,10 @@ fun IrrigationDeviceScreen(
                 stringResource(id = R.string.irrigation_setting),
                 R.drawable.ic_arrow_up_green,
                 onClick = {
-
+                    navController.navigate(Screen.IrrigationSetting.withArgs(deviceID, deviceCode))
                 },
-                Green2,
-                Green2,
+                Primary2,
+                Primary2,
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -133,10 +133,10 @@ fun IrrigationDeviceScreen(
                 stringResource(id = R.string.irrigation_status),
                 R.drawable.ic_arrow_up_green,
                 onClick = {
-
+                    navController.navigate(Screen.IrrigationStatus.withArgs(deviceID, deviceCode))
                 },
-                Green2,
-                Green2,
+                Primary2,
+                Primary2,
             )
         }
     }

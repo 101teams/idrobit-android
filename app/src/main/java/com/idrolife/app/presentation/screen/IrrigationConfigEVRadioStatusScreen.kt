@@ -55,9 +55,9 @@ import com.idrolife.app.presentation.component.NavigationBanner3
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.Green2
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -132,7 +132,7 @@ fun IrrigationConfigEVRadioStatusScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 CircularProgressIndicator(
-                    color = Green,
+                    color = Primary,
                     strokeCap = StrokeCap.Round,
                     strokeWidth = 2.dp,
                     modifier = Modifier
@@ -179,7 +179,7 @@ fun IrrigationConfigEVRadioStatusScreen(
                           viewModel.postDataLoading.value = false
                       }
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary2),
             ) {
                 if (viewModel.postDataLoading.value) {
                     CircularProgressIndicator(
@@ -226,7 +226,7 @@ data: IrrigationConfigEVRadioStatus
                         fontFamily = Manrope,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.Left,
-                        color = Green,
+                        color = Primary,
                     ),
                 )
                 Text("Group ${data.group ?: "-"}",
@@ -235,7 +235,7 @@ data: IrrigationConfigEVRadioStatus
                         fontFamily = Manrope,
                         fontWeight = FontWeight.Normal,
                         textAlign = TextAlign.Right,
-                        color = Green,
+                        color = Primary,
                     ),
                 )
             }
@@ -264,7 +264,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                 }
@@ -286,7 +286,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                 }
@@ -299,7 +299,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -309,7 +309,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                 }
@@ -322,7 +322,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -332,7 +332,7 @@ data: IrrigationConfigEVRadioStatus
                             fontFamily = Manrope,
                             fontWeight = FontWeight.Normal,
                             textAlign = TextAlign.Left,
-                            color = Green2,
+                            color = Primary2,
                         ),
                     )
                 }

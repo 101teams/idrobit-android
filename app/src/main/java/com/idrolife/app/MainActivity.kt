@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.idrolife.app.navigation.Navigation
 import com.idrolife.app.theme.AppTheme
+import com.idrolife.app.utils.PrefManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tag = "it" // it or en
+        val prefManager = PrefManager(this)
+        val tag = prefManager.getCurrentLanguage()
         val appLocale = LocaleListCompat.forLanguageTags(tag)
         AppCompatDelegate.setApplicationLocales(appLocale)
 

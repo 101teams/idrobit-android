@@ -1,6 +1,8 @@
 package com.idrolife.app.utils
 
 import android.content.Context
+import com.google.gson.Gson
+import com.idrolife.app.data.api.auth.User
 
 class PrefManager(
     context: Context
@@ -24,6 +26,32 @@ class PrefManager(
 
     fun getToken(): String {
         return getData("access_token", "")
+    }
+
+    fun setCurrentLanguage(language: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString("language", language)
+        editor.apply()
+    }
+
+    fun getUser(): User? {
+        val userJSON = sharedPreferences.getString("user", null)
+        return if (userJSON != null) {
+            Gson().fromJson(userJSON, User::class.java)
+        } else {
+            null
+        }
+    }
+
+    fun setUser(user: User?) {
+        val editor = sharedPreferences.edit()
+        val userJson = Gson().toJson(user)
+        editor.putString("user", userJson)
+        editor.apply()
+    }
+
+    fun getCurrentLanguage(): String {
+        return sharedPreferences.getString("language", "it")!!
     }
 
     fun setRememberMe(flag: Boolean) {

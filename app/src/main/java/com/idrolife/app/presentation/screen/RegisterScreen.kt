@@ -41,8 +41,8 @@ import com.idrolife.app.presentation.component.CustomTopBar
 import com.idrolife.app.presentation.component.Input
 import com.idrolife.app.presentation.component.PasswordInput
 import com.idrolife.app.theme.BrokenWhite
-import com.idrolife.app.theme.Green
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 
@@ -130,7 +130,7 @@ fun RegisterScreen(
 
             PasswordInput(
                 modifier = Modifier,
-                placeholder = "Confirm Password",
+                placeholder = stringResource(id = R.string.confirm_password),
                 binding = cpassword,
                 imeAction = ImeAction.Done,
                 keyboardActions = KeyboardActions(
@@ -161,7 +161,7 @@ fun RegisterScreen(
                             fontFamily = Manrope,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Green,
+                            color = Primary,
                         ),
                     )
                 }
@@ -175,7 +175,7 @@ fun RegisterScreen(
                     .padding(top = 12.dp),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {  },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
             ) {
                 Text(stringResource(id = R.string.submit), style = MaterialTheme.typography.button, fontSize = 18.sp)
             }
@@ -203,7 +203,7 @@ fun RegisterScreen(
                             fontFamily = Manrope,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Green,
+                            color = Primary,
                         ),
                     )
                 }

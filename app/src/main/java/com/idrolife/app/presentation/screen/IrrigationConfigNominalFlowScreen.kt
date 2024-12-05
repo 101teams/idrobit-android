@@ -68,7 +68,8 @@ import com.idrolife.app.theme.Gray
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryLight
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
@@ -215,7 +216,7 @@ fun IrrigationConfigNominalFlowScreen(
                         viewModel.postDataLoading.value = false
                     }
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary2),
             ) {
                 if (viewModel.postDataLoading.value) {
                     CircularProgressIndicator(
@@ -369,14 +370,14 @@ fun NominalFlowItem(
                             .width(110.dp)
                             .height(40.dp)
                             .background(
-                                color = if (modeAuto.value) Green else BlackSoft,
+                                color = if (modeAuto.value) Primary else BlackSoft,
                                 shape = RoundedCornerShape(20.dp)
                             )
                             .padding(4.dp)
                             .clickable {
                                 modeAuto.value = !modeAuto.value
                                 onAuto(modeAuto.value)
-                           },
+                            },
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
@@ -405,7 +406,8 @@ fun NominalFlowItem(
                     }
                 }
                 Column {
-                    Text("Nominal Value",
+                    Text(
+                        stringResource(id = R.string.nominal_value),
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = Manrope,

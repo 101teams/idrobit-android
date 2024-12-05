@@ -11,4 +11,6 @@ object HttpRoutes {
     const val DEVICE_CONTROL = "${Constants.API_URL}${v1}/device/control"
     const val DEVICE_RAW_CONTROL = "${Constants.API_URL}${v1}/device/raw-control"
     const val DEVICE_GEO = "${Constants.API_URL}${v1}/device-geo"
+    const val DEVICE_RELATED_SUPERADMIN = "${Constants.API_URL}${v1}/device-related/superadmin"
+    const val DEVICE_ALARMS = "${Constants.API_URL}${v1}/device-alarm"
 }

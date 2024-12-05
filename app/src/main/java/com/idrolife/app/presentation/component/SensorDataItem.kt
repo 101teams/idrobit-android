@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.Green2
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
 
 
 @Composable
@@ -48,11 +48,11 @@ fun SensorDataItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = value, fontSize = 34.sp, fontFamily = Manrope, fontWeight = FontWeight.Normal, color = Green,)
-                Text(text = unit, fontSize = 18.sp, fontFamily = Manrope, fontWeight = FontWeight.Normal, color = Green,)
+                Text(text = value, fontSize = 34.sp, fontFamily = Manrope, fontWeight = FontWeight.Normal, color = Primary,)
+                Text(text = unit, fontSize = 18.sp, fontFamily = Manrope, fontWeight = FontWeight.Normal, color = Primary,)
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Text(text = name, fontSize = 14.sp, fontFamily = Manrope, fontWeight = FontWeight.Medium, color = Green2,)
+            Text(text = name, fontSize = 14.sp, fontFamily = Manrope, fontWeight = FontWeight.Medium, color = Primary2,)
         }
     }
 }

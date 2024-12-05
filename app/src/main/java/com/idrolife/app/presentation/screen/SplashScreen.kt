@@ -25,9 +25,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.idrolife.app.R
-import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.viewmodel.AuthViewModel
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Primary
 
 @Composable
 fun SplashScreen(
@@ -46,11 +45,11 @@ fun SplashScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    navController.navigate(if (viewModel.isLoggedIn()) Screen.Main.route else Screen.Login.route) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
-                    }
+//                    navController.navigate(if (viewModel.isLoggedIn()) Screen.Main.route else Screen.Login.route) {
+//                        popUpTo(navController.graph.id) {
+//                            inclusive = true
+//                        }
+//                    }
                 }, 2000)
             }
         }
@@ -62,7 +61,7 @@ fun SplashScreen(
 
     Column(
         modifier = Modifier.fillMaxSize()
-            .background(Green),
+            .background(Primary),
     ) {
         Box(
             modifier = Modifier.fillMaxSize()

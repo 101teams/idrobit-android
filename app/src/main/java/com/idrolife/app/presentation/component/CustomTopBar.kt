@@ -3,6 +3,7 @@ package com.idrolife.app.presentation.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,18 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.idrolife.app.R
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Black
+import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
 
 @Composable
 fun CustomTopBar(
@@ -74,7 +75,7 @@ fun CustomTopBar(
                         style = TextStyle(
                             fontSize = 30.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Green,
+                            color = Primary,
                             fontFamily = Manrope,
                         ),
                         modifier = Modifier
@@ -88,4 +89,51 @@ fun CustomTopBar(
             elevation = 0.dp
         )
     }
+}
+
+@Composable
+fun CustomTopBarSimple(navController: NavController, title: String){
+    TopAppBar(
+        modifier = Modifier,
+        title = {
+            Spacer(modifier = Modifier.height(24.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+                        navController.navigateUp()
+                    },
+                    modifier = Modifier
+                        .width(36.dp)
+                        .height(36.dp)
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(28.dp),
+                        bitmap = ImageBitmap.imageResource(R.drawable.ic_arrow_back_black),
+                        contentDescription = "back button"
+                    )
+                }
+
+                Text(
+                    title,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = Black,
+                        fontFamily = Manrope,
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 36.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        backgroundColor = BrokenWhite,
+        elevation = 2.dp
+    )
 }

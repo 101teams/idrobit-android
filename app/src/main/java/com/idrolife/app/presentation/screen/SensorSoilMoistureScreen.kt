@@ -61,8 +61,8 @@ import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.Green2
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import com.idrolife.app.utils.SystemBroadcastReceiver
@@ -208,7 +208,7 @@ fun SensorSoilMoistureScreen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                DataTableHeader(backgroundColor = Green2, fontColor = White, titles = mutableListOf("Name", "level 1", "level 2", "level 3", "level 4"))
+                DataTableHeader(backgroundColor = Primary2, fontColor = White, titles = mutableListOf("Name", "level 1", "level 2", "level 3", "level 4"))
 
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -219,7 +219,7 @@ fun SensorSoilMoistureScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         CircularProgressIndicator(
-                            color = Green,
+                            color = Primary,
                             strokeCap = StrokeCap.Round,
                             strokeWidth = 2.dp,
                             modifier = Modifier

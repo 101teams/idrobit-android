@@ -3,12 +3,17 @@ package com.idrolife.app.service
 import com.idrolife.app.data.api.HttpRoutes
 import com.idrolife.app.data.api.UnauthorizedException
 import com.idrolife.app.data.api.UnprocessableEntityException
+import com.idrolife.app.data.api.device.CreatePlantRequest
+import com.idrolife.app.data.api.device.DeviceAlarmsResponse
 import com.idrolife.app.data.api.device.DeviceByIDResponse
 import com.idrolife.app.data.api.device.DeviceListResponse
+import com.idrolife.app.data.api.device.DeviceRelatedResponse
+import com.idrolife.app.data.api.device.EditPlantRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigDeviceGeoRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowData
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowResponse
+import com.idrolife.app.data.api.map.DeviceGeoResponse
 import com.idrolife.app.data.api.sensor.SensorMeteostatResponse
 import com.idrolife.app.data.api.sensor.SensorSatstatResponse
 import com.idrolife.app.data.api.sensor.SoilMoistureMarkerRequest
@@ -21,7 +26,9 @@ import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 import io.ktor.client.plugins.plugin
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
@@ -276,6 +283,124 @@ class DeviceServiceImpl(
             Pair(false, "Error 5xx: ${e.response.status.description}")
         } catch (e: Exception) {
             Pair(false, "Error: ${e.message}")
+        }
+    }
+
+    override suspend fun getDeviceGeo(deviceCode: String): Pair<DeviceGeoResponse?, String> {
+        return try {
+            val response = client.get {
+                url("${HttpRoutes.DEVICE_GEO }/${deviceCode}")
+            }.body<DeviceGeoResponse>()
+            Pair(response, "")
+        } catch (e: UnauthorizedException) {
+            Pair(null, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(null, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(null, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(null, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(null, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun postCreatePlant(data: CreatePlantRequest): Pair<Boolean, String> {
+        return try {
+            client.post {
+                url(HttpRoutes.DEVICE)
+                contentType(Json)
+                setBody(data)
+            }
+            Pair(true, "")
+        } catch (e: UnprocessableEntityException) {
+            Pair(false, e.message)
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error: ${e.message}")
+        }
+    }
+
+    override suspend fun getRelatedDevice(): Pair<DeviceRelatedResponse?, String> {
+        return try {
+            val response = client.get {
+                url(HttpRoutes.DEVICE_RELATED_SUPERADMIN)
+            }.body<DeviceRelatedResponse>()
+            Pair(response, "")
+        } catch (e: UnauthorizedException) {
+            Pair(null, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(null, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(null, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(null, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(null, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun editRelatedDevice(data: EditPlantRequest, id: Int): Pair<Boolean, String> {
+        return try {
+            client.patch {
+                url(HttpRoutes.DEVICE + "/${id}")
+                contentType(Json)
+                setBody(data)
+            }
+            Pair(true, "")
+        } catch (e: UnauthorizedException) {
+            Pair(false, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun deleteRelatedDevice(id: Int): Pair<Boolean, String> {
+        return try {
+            client.delete {
+                url(HttpRoutes.DEVICE + "/${id}")
+            }
+            Pair(true, "")
+        } catch (e: UnauthorizedException) {
+            Pair(false, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun getDeviceAlarm(deviceCode: String, language: String): Pair<DeviceAlarmsResponse?, String> {
+        return try {
+            val response = client.get {
+                url("${HttpRoutes.DEVICE_ALARMS}/${deviceCode}/${language}")
+            }.body<DeviceAlarmsResponse>()
+            Pair(response, "")
+        } catch (e: UnauthorizedException) {
+            Pair(null, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(null, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(null, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(null, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(null, "Error 3xx: ${e.message}")
         }
     }
 }

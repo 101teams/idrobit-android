@@ -128,9 +128,6 @@ fun IrrigationConfigScreen(
                 IrrigationConfigButton(title = context.getString(R.string.ev_configuration)) {
                     navController.navigate(Screen.IrrigationConfigEVConfig.withArgs(deviceID, deviceCode))
                 }
-                IrrigationConfigButton(title = context.getString(R.string.station_management)) {
-
-                }
             }
         }
     }

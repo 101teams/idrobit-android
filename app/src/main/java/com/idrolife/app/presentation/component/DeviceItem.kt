@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +37,9 @@ import com.idrolife.app.R
 import com.idrolife.app.data.api.device.DevicesItem
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.GreenLight2
 import com.idrolife.app.theme.Manrope
-
+import com.idrolife.app.theme.PrimaryLight2
+import com.idrolife.app.theme.White
 
 
 @Composable
@@ -64,6 +69,8 @@ fun DataFieldHorizontal(label: String, value: String) {
 fun DeviceStatusCard(
     data: DevicesItem?,
     onClick: () -> Unit,
+    showDeviceError: MutableState<Boolean>,
+    selectedDeviceCode: MutableState<String>,
 ) {
     if (data != null) {
         Card(
@@ -104,7 +111,7 @@ fun DeviceStatusCard(
                                     .padding(end = 8.dp)
                                     .size(10.dp)
                                     .clip(RoundedCornerShape(5.dp))
-                                    .background(if (data.status?.lowercase() == "online") GreenLight2 else Color.Red)
+                                    .background(if (data.status?.lowercase() == "online") PrimaryLight2 else Color.Red)
                             )
                             Text(text = data.name ?: "-", fontSize = 20.sp, color = Color.Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
                         }
@@ -182,6 +189,27 @@ fun DeviceStatusCard(
                             Text(text = stringResource(id = R.string.active_station), fontSize = 14.sp, color = Black, fontFamily = Manrope, fontWeight = FontWeight.Medium)
                             Text(text = data.activeStation ?: "-", fontSize = 16.sp, color = Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
                         }
+                    }
+                }
+
+                if (data.isAlarmDevice != null && data.isAlarmDevice.toInt() > 0) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .height(62.dp)
+                            .fillMaxWidth()
+                            .padding(top = 12.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        onClick = {
+                            selectedDeviceCode.value = data.code ?: ""
+                            showDeviceError.value = true
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = White,),
+                        border = BorderStroke(1.dp, Color.Red),
+                    ) {
+                        Text(stringResource(id = R.string.see_alarms), style = MaterialTheme.typography.button, fontSize = 18.sp, color = Color.Red)
                     }
                 }
             }

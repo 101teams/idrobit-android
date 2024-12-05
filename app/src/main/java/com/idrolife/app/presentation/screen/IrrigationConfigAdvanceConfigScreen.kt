@@ -47,7 +47,8 @@ import com.idrolife.app.presentation.component.InputWithInitial
 import com.idrolife.app.presentation.component.NavigationBanner3
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.BrokenWhite
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -122,7 +123,7 @@ fun IrrigationConfigAdvanceConfigScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 CircularProgressIndicator(
-                    color = Green,
+                    color = Primary,
                     strokeCap = StrokeCap.Round,
                     strokeWidth = 2.dp,
                     modifier = Modifier
@@ -302,7 +303,7 @@ fun IrrigationConfigAdvanceConfigScreen(
                           }
                       }
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary2),
             ) {
                 if (viewModel.postDataLoading.value) {
                     CircularProgressIndicator(

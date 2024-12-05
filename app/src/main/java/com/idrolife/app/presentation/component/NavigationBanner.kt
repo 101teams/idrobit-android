@@ -40,9 +40,9 @@ import com.idrolife.app.R
 import com.idrolife.app.data.api.device.DevicesItem
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.BrokenWhite
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.GreenLight2
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.PrimaryLight2
 import com.idrolife.app.theme.White
 
 
@@ -56,7 +56,7 @@ fun NavigationBanner1(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(GreenLight2)
+            .background(PrimaryLight2)
             .height(180.dp)
     ) {
         Column {
@@ -102,7 +102,7 @@ fun NavigationBanner2(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(GreenLight2)
+            .background(PrimaryLight2)
             .height(180.dp)
     ) {
         Image(
@@ -187,7 +187,7 @@ fun NavigationBanner2(
                                             .padding(end = 8.dp)
                                             .size(10.dp)
                                             .clip(RoundedCornerShape(5.dp))
-                                            .background(if (data?.status?.lowercase() == "online") GreenLight2 else Color.Red)
+                                            .background(if (data?.status?.lowercase() == "online") PrimaryLight2 else Color.Red)
                                     )
                                     Text(text = data?.name ?: "-", fontSize = 20.sp, color = Color.Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
                                 }
@@ -211,7 +211,7 @@ fun NavigationBanner2(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             CircularProgressIndicator(
-                                color = Green,
+                                color = Primary,
                                 strokeCap = StrokeCap.Round,
                                 strokeWidth = 2.dp,
                                 modifier = Modifier
@@ -309,7 +309,7 @@ fun NavigationBanner3(
                                     .padding(end = 8.dp)
                                     .size(10.dp)
                                     .clip(RoundedCornerShape(5.dp))
-                                    .background(if (data?.status?.lowercase() == "online") GreenLight2 else Color.Red)
+                                    .background(if (data?.status?.lowercase() == "online") PrimaryLight2 else Color.Red)
                             )
                             Text(text = data?.name ?: "-", fontSize = 20.sp, color = Color.Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
                         }
@@ -335,7 +335,7 @@ fun NavigationBanner3(
                         .height(76.dp)
                 ) {
                     CircularProgressIndicator(
-                        color = Green,
+                        color = Primary,
                         strokeCap = StrokeCap.Round,
                         strokeWidth = 2.dp,
                         modifier = Modifier

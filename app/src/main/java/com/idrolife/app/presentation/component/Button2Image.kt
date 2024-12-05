@@ -31,7 +31,7 @@ import com.idrolife.app.theme.White
 @Composable
 fun Button2Image(
     backgroundColor: Color,
-    leftImage: Int,
+    leftImage: Int?,
     title: String,
     rightImage: Int,
     onClick: () -> Unit,
@@ -60,15 +60,17 @@ fun Button2Image(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
-                    painter = painterResource(id = leftImage),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .height(36.dp)
-                        .width(36.dp),
-                    contentScale = ContentScale.Fit,
-                )
-                Spacer(modifier = Modifier.width(12.dp))
+                if (leftImage != null) {
+                    Image(
+                        painter = painterResource(id = leftImage),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .height(36.dp)
+                            .width(36.dp),
+                        contentScale = ContentScale.Fit,
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                }
                 Text(title, style = MaterialTheme.typography.button, fontSize = 16.sp, color = fontColor ?: White, fontWeight = FontWeight.Medium,)
             }
             Image(

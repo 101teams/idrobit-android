@@ -48,20 +48,20 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
-import com.idrolife.app.presentation.component.CheckBoxWithTitle
 import com.idrolife.app.presentation.component.DropDown
 import com.idrolife.app.presentation.component.InputWithInitial
 import com.idrolife.app.presentation.component.NavigationBanner3
 import com.idrolife.app.presentation.component.PasswordInputWithInitial
 import com.idrolife.app.presentation.component.RangedSeekbar
+import com.idrolife.app.presentation.component.ToggleWithTitle
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.GrayVeryVeryLight
-import com.idrolife.app.theme.Green
-import com.idrolife.app.theme.Green2
-import com.idrolife.app.theme.GreenVeryLight
 import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.Primary
+import com.idrolife.app.theme.Primary2
+import com.idrolife.app.theme.PrimaryVeryLight
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -151,7 +151,7 @@ fun IrrigationConfigGeneralSettingScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 CircularProgressIndicator(
-                    color = Green,
+                    color = Primary,
                     strokeCap = StrokeCap.Round,
                     strokeWidth = 2.dp,
                     modifier = Modifier
@@ -215,11 +215,11 @@ fun IrrigationConfigGeneralSettingScreen(
                                     viewModel.setMarkerLoading.value = false
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = GreenVeryLight,),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = PrimaryVeryLight,),
                         ) {
                             if (viewModel.setMarkerLoading.value) {
                                 CircularProgressIndicator(
-                                    color = Green,
+                                    color = Primary,
                                     strokeCap = StrokeCap.Round,
                                     strokeWidth = 2.dp,
                                     modifier = Modifier
@@ -227,7 +227,7 @@ fun IrrigationConfigGeneralSettingScreen(
                                         .height(12.dp)
                                 )
                             } else {
-                                Text(stringResource(id = R.string.clean_memory), style = MaterialTheme.typography.button, fontSize = 12.sp, color = Green)
+                                Text(stringResource(id = R.string.clean_memory), style = MaterialTheme.typography.button, fontSize = 12.sp, color = Primary)
                             }
                         }
                     }
@@ -236,7 +236,7 @@ fun IrrigationConfigGeneralSettingScreen(
 
                     PasswordInputWithInitial(
                         modifier = Modifier,
-                        field = "Password",
+                        field = stringResource(id = R.string.password),
                         placeholder = stringResource(id = R.string.password),
                         disabled = false,
                         initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.password ?: "",
@@ -270,7 +270,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             ),
                             Modifier.weight(1f),
                             selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.entry1 ?: "",
-                            onSelectItem = {
+                            onSelectItem = { _, it ->
                                 viewModel.irrigationConfigGeneralSatConfig.value?.entry1 = it
                             }
                         )
@@ -293,7 +293,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             ),
                             Modifier.weight(1f),
                             selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.entry2 ?: "",
-                            onSelectItem = {
+                            onSelectItem = { _, it ->
 
                             }
                         )
@@ -324,7 +324,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             ),
                             Modifier.weight(1f),
                             selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.entry3 ?: "",
-                            onSelectItem = {
+                            onSelectItem = { _, it ->
 
                             }
                         )
@@ -351,7 +351,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             ),
                             Modifier.weight(1f),
                             selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.entry4 ?: "",
-                            onSelectItem = {
+                            onSelectItem = { _, it ->
 
                             }
                         )
@@ -364,25 +364,6 @@ fun IrrigationConfigGeneralSettingScreen(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        DropDown(
-                            field = stringResource(id = R.string.plant_operation_status),
-                            mutableListOf(
-                                Pair(
-                                    stringResource(id = R.string.off),
-                                    "1"
-                                ),
-                                Pair(
-                                    stringResource(id = R.string.on),
-                                    "0"
-                                ),
-                            ),
-                            Modifier.weight(1f),
-                            selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.plantOperationStatus ?: "",
-                            onSelectItem = {
-
-                            }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
                         InputWithInitial(
                             modifier = Modifier,
                             field = stringResource(id = R.string.max_active_prog),
@@ -484,7 +465,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             ),
                             Modifier.weight(1f),
                             selectedValue = viewModel.irrigationConfigGeneralSatConfig.value?.pulsesFlow ?: "",
-                            onSelectItem = {
+                            onSelectItem = { _, it ->
 
                             }
                         )
@@ -507,7 +488,7 @@ fun IrrigationConfigGeneralSettingScreen(
                                 imeAction = ImeAction.Done
                             ),
                             modifierParent = Modifier.weight(1f),
-                            trailingUnit = "W/m2",
+                            trailingUnit = "W/m²",
                             initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.solarIntensity ?: "",
                             onTextChanged = {
                                 viewModel.irrigationConfigGeneralSatConfig.value?.solarIntensity = it
@@ -539,7 +520,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        CheckBoxWithTitle(
+                        ToggleWithTitle(
                             field = stringResource(id = R.string.ev_master),
                             checkedTitle = "ON",
                             uncheckedTitle = "OFF",
@@ -550,7 +531,7 @@ fun IrrigationConfigGeneralSettingScreen(
                             }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        CheckBoxWithTitle(
+                        ToggleWithTitle(
                             field = stringResource(id = R.string.ec_command),
                             checkedTitle = "ON",
                             uncheckedTitle = "OFF",
@@ -574,7 +555,10 @@ fun IrrigationConfigGeneralSettingScreen(
                         onValueChanged = {min, max ->
                             viewModel.irrigationConfigGeneralSatConfig.value?.pressureMin = min.toString()
                             viewModel.irrigationConfigGeneralSatConfig.value?.pressureMax = max.toString()
-                        }
+                        },
+                        boxInputFieldModifier = null,
+                        minText = "Min",
+                        maxText = "Max",
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -884,7 +868,7 @@ fun IrrigationConfigGeneralSettingScreen(
                         }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green2),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary2),
             ) {
                 if (viewModel.postDataLoading.value) {
                     CircularProgressIndicator(

@@ -41,7 +41,12 @@ class AuthServiceImpl(
             val response = e.response.body<ErrorResponse>()
             Pair(null, response.error)
         } catch (e: ServerResponseException) {
-            Pair(null, "Error 5xx: ${e.response.status.description}")
+            try{
+                val response = e.response.body<ErrorResponse>()
+                Pair(null, response.error)
+            } catch (er: Exception) {
+                Pair(null, "Error 5xx: ${e.response.status.description}")
+            }
         } catch (e: Exception) {
             Pair(null, "Error: ${e.message}")
         }

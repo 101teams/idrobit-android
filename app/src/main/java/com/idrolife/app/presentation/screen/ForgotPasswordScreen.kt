@@ -34,7 +34,7 @@ import com.idrolife.app.R
 import com.idrolife.app.presentation.component.CustomTopBar
 import com.idrolife.app.presentation.component.Input
 import com.idrolife.app.theme.BrokenWhite
-import com.idrolife.app.theme.Green
+import com.idrolife.app.theme.Primary
 import com.idrolife.app.utils.Helper
 
 @Composable
@@ -91,7 +91,7 @@ fun ForgotPasswordScreen(
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(0.dp),
                 onClick = {  },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
             ) {
                 Text(stringResource(id = R.string.submit), style = MaterialTheme.typography.button, fontSize = 18.sp)
             }

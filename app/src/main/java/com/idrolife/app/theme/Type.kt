@@ -23,7 +23,7 @@ val Typography = Typography(
         fontFamily = Manrope,
         fontWeight = FontWeight.SemiBold,
         fontSize = 96.sp,
-        color = Green,
+        color = Primary,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
@@ -32,7 +32,7 @@ val Typography = Typography(
         fontFamily = Manrope,
         fontWeight = FontWeight.Medium,
         fontSize = 30.sp,
-        color = Green,
+        color = Primary,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
         )
@@ -41,25 +41,25 @@ val Typography = Typography(
         fontFamily = Manrope,
         fontWeight = FontWeight.SemiBold,
         fontSize = 14.sp,
-        color = Green
+        color = Primary
     ),
     body1 = TextStyle(
         fontFamily = Manrope,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        color = Green
+        color = Primary
     ),
     body2 = TextStyle(
         fontFamily = Manrope,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
-        color = Green
+        color = Primary
     ),
     caption = TextStyle(
         fontFamily = Manrope,
         fontWeight = FontWeight.Normal,
         fontSize = 10.sp,
-        color = Green
+        color = Primary
     ),
     button = TextStyle(
         fontFamily = Manrope,

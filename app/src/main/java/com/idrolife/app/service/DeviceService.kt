@@ -1,9 +1,14 @@
 package com.idrolife.app.service
 
+import com.idrolife.app.data.api.device.CreatePlantRequest
+import com.idrolife.app.data.api.device.DeviceAlarmsResponse
 import com.idrolife.app.data.api.device.DeviceByIDResponse
 import com.idrolife.app.data.api.device.DeviceListResponse
+import com.idrolife.app.data.api.device.DeviceRelatedResponse
+import com.idrolife.app.data.api.device.EditPlantRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigDeviceGeoRequest
 import com.idrolife.app.data.api.irrigation.IrrigationConfigNominalFlowResponse
+import com.idrolife.app.data.api.map.DeviceGeoResponse
 import com.idrolife.app.data.api.sensor.SensorMeteostatResponse
 import com.idrolife.app.data.api.sensor.SensorSatstatResponse
 import com.idrolife.app.data.api.sensor.SoilMoistureMarkerRequest
@@ -21,4 +26,10 @@ interface DeviceService {
     suspend fun postIrrigationConfigNominalFlow(deviceCode: String, command: String, data: Map<String, String>): Pair<Boolean, String>
     suspend fun postIrrigationConfigRawControl(deviceCode: String, command: String, data: Map<String, String>): Pair<Boolean, String>
     suspend fun postIrrigationConfigDeviceGeo(data: IrrigationConfigDeviceGeoRequest): Pair<Boolean, String>
+    suspend fun getDeviceGeo(deviceCode: String): Pair<DeviceGeoResponse?, String>
+    suspend fun postCreatePlant(data: CreatePlantRequest): Pair<Boolean, String>
+    suspend fun getRelatedDevice(): Pair<DeviceRelatedResponse?, String>
+    suspend fun editRelatedDevice(data: EditPlantRequest, id: Int): Pair<Boolean, String>
+    suspend fun deleteRelatedDevice(id: Int): Pair<Boolean, String>
+    suspend fun getDeviceAlarm(deviceCode: String, language: String): Pair<DeviceAlarmsResponse?, String>
 }

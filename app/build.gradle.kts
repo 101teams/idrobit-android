@@ -29,6 +29,32 @@ android {
             )
         }
     }
+
+    android.buildFeatures.buildConfig = true
+    flavorDimensions += "version"
+    productFlavors {
+        create("idroLife") {
+            dimension = "version"
+            applicationId = "com.idrolife.portali"
+            resValue("string", "app_name", "IdroLife +")
+        }
+        create("idroPro") {
+            dimension = "version"
+            applicationId = "com.idropro.portali"
+            resValue("string", "app_name", "IdroPro Plus")
+        }
+        create("idroRes") {
+            dimension = "version"
+            applicationId = "com.idrores.portali"
+            resValue("string", "app_name", "IdroRes +")
+        }
+        create("irriLife") {
+            dimension = "version"
+            applicationId = "com.irrilife.portali"
+            resValue("string", "app_name", "IrriLife")
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -59,6 +85,9 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation("com.google.dagger:hilt-android:2.48")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.4.0")
+    implementation("androidx.camera:camera-view:1.4.0")
+    implementation("androidx.camera:camera-core:1.4.0")
     kapt("com.google.dagger:hilt-compiler:2.48")
     kapt("androidx.hilt:hilt-compiler:1.2.0")
 
@@ -69,7 +98,7 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
-
+    implementation("com.google.accompanist:accompanist-drawablepainter:0.36.0")
 
     implementation("io.ktor:ktor-client-core:2.3.10")
     implementation("io.ktor:ktor-client-cio:2.3.10")
@@ -81,7 +110,12 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
+    implementation ("com.google.mlkit:barcode-scanning:17.3.0")
+    implementation ("androidx.camera:camera-camera2:1.4.0")
+
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.google.maps.android:maps-compose:4.3.3")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
