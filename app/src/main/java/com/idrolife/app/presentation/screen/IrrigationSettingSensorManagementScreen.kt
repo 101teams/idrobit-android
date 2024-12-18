@@ -56,6 +56,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.component.DropDown
@@ -73,6 +74,7 @@ import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.PrimaryLight
+import com.idrolife.app.theme.PrimaryPale
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -231,40 +233,42 @@ fun IrrigationSettingSensorManagementScreen(
 
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                shape = RoundedCornerShape(12.dp),
-                                elevation = 4.dp,
-                                backgroundColor = GrayVeryVeryLight,
-                            ) {
-                                Column(
+                            if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                                Card(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(12.dp),
+                                        .fillMaxWidth(),
+                                    shape = RoundedCornerShape(12.dp),
+                                    elevation = 4.dp,
+                                    backgroundColor = GrayVeryVeryLight,
                                 ) {
-                                    RangedSeekbar(
-                                        field = stringResource(id = R.string.temperature),
-                                        min= -20,
-                                        max = 100,
-                                        modifier = null,
-                                        currentMin = viewModel.irrigationSettingSensorManagement.value?.lowTemp?.toInt(),
-                                        currentMax = viewModel.irrigationSettingSensorManagement.value?.highTemp?.toInt(),
-                                        onValueChanged = {min, max ->
-                                            viewModel.irrigationSettingSensorManagement.value?.lowTemp = min.toString()
-                                            viewModel.irrigationSettingSensorManagement.value?.highTemp = max.toString()
-                                        },
-                                        boxInputFieldModifier = Modifier.background(
-                                            Color(0xFFC8D4CF),
-                                            shape = RoundedCornerShape(8.dp),
-                                        ),
-                                        minText = "${stringResource(id = R.string.low)} °C",
-                                        maxText = "${stringResource(id = R.string.high)} °C",
-                                    )
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(12.dp),
+                                    ) {
+                                        RangedSeekbar(
+                                            field = stringResource(id = R.string.temperature),
+                                            min= -20,
+                                            max = 100,
+                                            modifier = null,
+                                            currentMin = viewModel.irrigationSettingSensorManagement.value?.lowTemp?.toInt(),
+                                            currentMax = viewModel.irrigationSettingSensorManagement.value?.highTemp?.toInt(),
+                                            onValueChanged = {min, max ->
+                                                viewModel.irrigationSettingSensorManagement.value?.lowTemp = min.toString()
+                                                viewModel.irrigationSettingSensorManagement.value?.highTemp = max.toString()
+                                            },
+                                            boxInputFieldModifier = Modifier.background(
+                                                PrimaryPale,
+                                                shape = RoundedCornerShape(8.dp),
+                                            ),
+                                            minText = "${stringResource(id = R.string.low)} °C",
+                                            maxText = "${stringResource(id = R.string.high)} °C",
+                                        )
+                                    }
                                 }
-                            }
 
-                            Spacer(modifier = Modifier.height(12.dp))
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
 
                             Card(
                                 modifier = Modifier
@@ -526,20 +530,31 @@ fun IrrigationSettingSensorManagementScreen(
 
                             VerticalMultipleCheckWithTitle(
                                 field = stringResource(id = R.string.program_stop),
-                                items = mutableListOf(
-                                    Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(0) == '1'),
-                                    Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(1) == '1'),
-                                    Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(2) == '1'),
-                                    Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(3) == '1'),
-                                    Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(4) == '1'),
-                                    Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(5) == '1'),
-                                    Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(6) == '1'),
-                                    Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(7) == '1'),
-                                    Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(8) == '1'),
-                                    Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(9) == '1'),
-                                    Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(10) == '1'),
-                                    Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(11) == '1'),
-                                ),
+                                items =
+                                if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                                    mutableListOf(
+                                        Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(0) == '1'),
+                                        Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(1) == '1'),
+                                        Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(2) == '1'),
+                                        Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(3) == '1'),
+                                        Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(4) == '1'),
+                                        Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(5) == '1'),
+                                        Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(6) == '1'),
+                                        Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(7) == '1'),
+                                        Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(8) == '1'),
+                                        Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(9) == '1'),
+                                        Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(10) == '1'),
+                                        Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(11) == '1'),
+                                    )
+                                 } else {
+                                    mutableListOf(
+                                        Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(1) == '1'),
+                                        Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(4) == '1'),
+                                        Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(7) == '1'),
+                                        Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(10) == '1'),
+                                        Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStop?.get(11) == '1'),
+                                    )
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                                 onChecked = {index, data ->
                                     val charArray = viewModel.irrigationSettingSensorManagement.value?.programStop?.toCharArray()
@@ -580,61 +595,63 @@ fun IrrigationSettingSensorManagementScreen(
 
                             Spacer(modifier = Modifier.height(24.dp))
 
-                            VerticalMultipleCheckWithTitle(
-                                field = stringResource(id = R.string.program_start),
-                                items = mutableListOf(
-                                    Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(0) == '1'),
-                                    Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(1) == '1'),
-                                    Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(2) == '1'),
-                                    Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(3) == '1'),
-                                    Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(4) == '1'),
-                                    Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(5) == '1'),
-                                    Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(6) == '1'),
-                                    Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(7) == '1'),
-                                    Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(8) == '1'),
-                                    Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(9) == '1'),
-                                    Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(10) == '1'),
-                                    Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(11) == '1'),
-                                ),
-                                modifier = Modifier.fillMaxWidth(),
-                                onChecked = {index, data ->
-                                    val charArray = viewModel.irrigationSettingSensorManagement.value?.programStart?.toCharArray()
-                                    charArray!![index] = if(data.second) '1' else '0'
-                                    viewModel.irrigationSettingSensorManagement.value?.programStart = String(charArray)
-                                },
-                                disableAll = false,
-                                columnCount = 2,
-                            )
+                            if (BuildConfig.FLAVOR == "idroPro" || BuildConfig.FLAVOR == "idroLife") {
+                                VerticalMultipleCheckWithTitle(
+                                    field = stringResource(id = R.string.program_start),
+                                    items = mutableListOf(
+                                        Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(0) == '1'),
+                                        Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(1) == '1'),
+                                        Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(2) == '1'),
+                                        Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(3) == '1'),
+                                        Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(4) == '1'),
+                                        Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(5) == '1'),
+                                        Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(6) == '1'),
+                                        Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(7) == '1'),
+                                        Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(8) == '1'),
+                                        Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(9) == '1'),
+                                        Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(10) == '1'),
+                                        Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStart?.get(11) == '1'),
+                                    ),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onChecked = {index, data ->
+                                        val charArray = viewModel.irrigationSettingSensorManagement.value?.programStart?.toCharArray()
+                                        charArray!![index] = if(data.second) '1' else '0'
+                                        viewModel.irrigationSettingSensorManagement.value?.programStart = String(charArray)
+                                    },
+                                    disableAll = false,
+                                    columnCount = 2,
+                                )
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                                Spacer(modifier = Modifier.height(24.dp))
 
-                            VerticalMultipleCheckWithTitle(
-                                field = stringResource(id = R.string.program_skip),
-                                items = mutableListOf(
-                                    Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(0) == '1'),
-                                    Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(1) == '1'),
-                                    Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(2) == '1'),
-                                    Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(3) == '1'),
-                                    Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(4) == '1'),
-                                    Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(5) == '1'),
-                                    Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(6) == '1'),
-                                    Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(7) == '1'),
-                                    Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(8) == '1'),
-                                    Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(9) == '1'),
-                                    Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(10) == '1'),
-                                    Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(11) == '1'),
-                                ),
-                                modifier = Modifier.fillMaxWidth(),
-                                onChecked = {index, data ->
-                                    val charArray = viewModel.irrigationSettingSensorManagement.value?.programSkip?.toCharArray()
-                                    charArray!![index] = if(data.second) '1' else '0'
-                                    viewModel.irrigationSettingSensorManagement.value?.programSkip = String(charArray)
-                                },
-                                disableAll = false,
-                                columnCount = 2,
-                            )
+                                VerticalMultipleCheckWithTitle(
+                                    field = stringResource(id = R.string.program_skip),
+                                    items = mutableListOf(
+                                        Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(0) == '1'),
+                                        Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(1) == '1'),
+                                        Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(2) == '1'),
+                                        Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(3) == '1'),
+                                        Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(4) == '1'),
+                                        Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(5) == '1'),
+                                        Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(6) == '1'),
+                                        Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(7) == '1'),
+                                        Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(8) == '1'),
+                                        Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(9) == '1'),
+                                        Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(10) == '1'),
+                                        Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programSkip?.get(11) == '1'),
+                                    ),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onChecked = {index, data ->
+                                        val charArray = viewModel.irrigationSettingSensorManagement.value?.programSkip?.toCharArray()
+                                        charArray!![index] = if(data.second) '1' else '0'
+                                        viewModel.irrigationSettingSensorManagement.value?.programSkip = String(charArray)
+                                    },
+                                    disableAll = false,
+                                    columnCount = 2,
+                                )
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                                Spacer(modifier = Modifier.height(24.dp))
+                            }
                         }
                     }
 

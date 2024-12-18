@@ -37,6 +37,7 @@ fun IrrigationDeviceScreen(
     navController: NavController,
     deviceID: String,
     deviceCode: String,
+    deviceRole: String,
 ) {
     val context = LocalContext.current
 
@@ -99,39 +100,41 @@ fun IrrigationDeviceScreen(
         Column(
             modifier = Modifier.padding(24.dp)
         ) {
-            Button2Image(
-                White,
-                R.drawable.ic_irrigation_config_green,
-                stringResource(id = R.string.irrigation_configuration),
-                R.drawable.ic_arrow_up_green,
-                onClick = {
-                    navController.navigate(Screen.IrrigationConfig.withArgs(deviceID, deviceCode))
-                },
-                Primary2,
-                Primary2,
-            )
+            if (deviceRole != "user") {
+                Button2Image(
+                    White,
+                    R.drawable.ic_irrigation_config_green,
+                    stringResource(id = R.string.irrigation_configuration),
+                    R.drawable.ic_arrow_up,
+                    onClick = {
+                        navController.navigate(Screen.IrrigationConfig.withArgs(deviceID, deviceCode))
+                    },
+                    Primary2,
+                    Primary2,
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            Button2Image(
-                White,
-                R.drawable.ic_irrigation_setting_green,
-                stringResource(id = R.string.irrigation_setting),
-                R.drawable.ic_arrow_up_green,
-                onClick = {
-                    navController.navigate(Screen.IrrigationSetting.withArgs(deviceID, deviceCode))
-                },
-                Primary2,
-                Primary2,
-            )
+                Button2Image(
+                    White,
+                    R.drawable.ic_irrigation_setting_green,
+                    stringResource(id = R.string.irrigation_setting),
+                    R.drawable.ic_arrow_up,
+                    onClick = {
+                        navController.navigate(Screen.IrrigationSetting.withArgs(deviceID, deviceCode))
+                    },
+                    Primary2,
+                    Primary2,
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+            }
 
             Button2Image(
                 White,
                 R.drawable.ic_irrigation_status_green,
                 stringResource(id = R.string.irrigation_status),
-                R.drawable.ic_arrow_up_green,
+                R.drawable.ic_arrow_up,
                 onClick = {
                     navController.navigate(Screen.IrrigationStatus.withArgs(deviceID, deviceCode))
                 },

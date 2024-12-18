@@ -5,6 +5,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.idrolife.app.data.api.auth.AuthRequest
+import com.idrolife.app.data.api.forgot_password.ForgotPasswordRequest
+import com.idrolife.app.data.api.register.RegisterRequest
 import com.idrolife.app.service.AuthService
 import com.idrolife.app.service.DeviceService
 import com.idrolife.app.utils.PrefManager
@@ -35,6 +37,28 @@ class AuthViewModel @Inject constructor(
 
         _loading.value = false
         return if (data?.token?.token != null) null else text
+    }
+
+    suspend fun register(request: RegisterRequest): String? {
+        _loading.value = true
+
+        val result = authService.register(request)
+        val data = result.first
+        val text = result.second // this can be a bearer token or an error message
+
+        _loading.value = false
+        return if (data?.user?.id != null) null else text
+    }
+
+    suspend fun forgotPassword(request: ForgotPasswordRequest, language: String): String? {
+        _loading.value = true
+
+        val result = authService.forgotPassword(request, language)
+        val data = result.first
+        val text = result.second // this can be a bearer token or an error message
+
+        _loading.value = false
+        return if (data?.status == "success") null else text
     }
 
     fun isLoggedIn(): Boolean {

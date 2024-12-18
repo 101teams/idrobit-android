@@ -72,13 +72,13 @@ import com.idrolife.app.theme.BlackSoft
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryLight
 import com.idrolife.app.theme.GrayVeryVeryLight
+import com.idrolife.app.theme.InputPlaceholderGray
+import com.idrolife.app.theme.Manrope
+import com.idrolife.app.theme.PlaceholderGray
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.PrimaryLight
 import com.idrolife.app.theme.PrimaryVeryLight
-import com.idrolife.app.theme.InputPlaceholderGray
-import com.idrolife.app.theme.Manrope
-import com.idrolife.app.theme.PlaceholderGray
 import com.idrolife.app.theme.White
 
 @Composable
@@ -149,7 +149,7 @@ fun Input(
                                 fontFamily = Manrope,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 12.sp,
-                                color = Primary,
+                                color = Black,
                                 textAlign = inputTextStyle?.textAlign ?: TextAlign.Start,
                             ),
                             modifier = Modifier.fillMaxWidth(),
@@ -167,7 +167,7 @@ fun Input(
                     visualTransformation = visualTransformation,
                     trailingIcon = if(trailingIcon != null) trailingIc else null,
                     colors = colorConfig ?: TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Primary,
+                        textColor = Black,
                         focusedBorderColor = if (disabled) PlaceholderGray else Primary,
                         unfocusedBorderColor = PlaceholderGray,
                         cursorColor = Primary,
@@ -307,13 +307,14 @@ fun InputWithInitial(
                     visualTransformation = visualTransformation,
                     trailingIcon = if(trailingIcon != null) trailingIc else null,
                     colors = colorConfig ?: TextFieldDefaults.outlinedTextFieldColors(
-                        textColor = Primary,
+                        textColor = Black,
                         focusedBorderColor = if (disabled) PlaceholderGray else Primary,
                         unfocusedBorderColor = PlaceholderGray,
                         cursorColor = Primary,
                         disabledBorderColor = Primary,
                     ),
                     shape = RoundedCornerShape(14.dp),
+                    textStyle = TextStyle.Default.copy(color = Black),
                 )
             }
 
@@ -325,7 +326,7 @@ fun InputWithInitial(
                     fontFamily = Manrope,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
-                    color = Black,
+                    color = Primary,
                 )
             }
         }
@@ -425,7 +426,7 @@ fun DropDown(
                     fontFamily = Manrope,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
-                    color = Primary,
+                    color = Black,
                 )
 
                 IconButton(
@@ -523,7 +524,7 @@ fun DropDownSmall(
                     fontFamily = Manrope,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
-                    color = Primary,
+                    color = Black,
                     textAlign = textAlign ?: TextAlign.End,
                 )
 

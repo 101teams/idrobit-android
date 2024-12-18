@@ -63,9 +63,9 @@ import com.idrolife.app.presentation.component.NavigationBanner2
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.BrokenWhite
+import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.PrimaryLight2
-import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 
@@ -295,7 +295,7 @@ fun DeviceGeoMarker(data: DeviceGeosItem?) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text(
-                                "${stringResource(id = R.string.station_serial)}:",
+                                "${stringResource(id = R.string.serial)}:",
                                 fontFamily = Manrope,
                                 fontWeight = FontWeight.SemiBold,
                                 fontSize = 14.sp,
@@ -385,7 +385,10 @@ fun DeviceGeoMarker(data: DeviceGeosItem?) {
 @Composable
 fun DeviceRHMarker(data: RhsItem?, index: Int) {
     if (data != null) {
-        if (!data.latitude.isNullOrEmpty() && !data.longitude.isNullOrEmpty()) {
+        if (!data.latitude.isNullOrEmpty() &&
+            !data.longitude.isNullOrEmpty() &&
+            data.latitude != "0" &&
+            data.longitude != "0") {
             val level = data.level?.split(",")
 
             val markerLocation = remember { mutableStateOf(LatLng(data.latitude.toDouble(), data.longitude.toDouble())) }

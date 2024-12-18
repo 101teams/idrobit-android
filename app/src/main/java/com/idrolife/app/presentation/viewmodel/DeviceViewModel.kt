@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.device.CreatePlantRequest
 import com.idrolife.app.data.api.device.DeviceRelatedItem
@@ -391,8 +392,8 @@ class DeviceViewModel @Inject constructor(
                 entry4= data["S1033"],
                 entry3forDelay= data["S1036"],
                 entry4forDelay= data["S1037"],
-                pressureMin= data["S1045"],
-                pressureMax= data["S1046"],
+                pressureMin= if (data["S1045"] != null && !data["S1045"].isNullOrEmpty()) data["S1045"]!!.toFloat().toInt().toString() else "0",
+                pressureMax= if (data["S1046"] != null && !data["S1046"].isNullOrEmpty()) data["S1046"]!!.toFloat().toInt().toString() else "0",
                 delayAlarmTimeLowPressure= data["S1047"],
                 delayAlarmTimeHighPressure= data["S1048"],
             )
@@ -520,7 +521,7 @@ class DeviceViewModel @Inject constructor(
         return null
     }
 
-    suspend fun postIrrigationConfigSatConfig(
+    suspend fun postRainMode(
         deviceCode: String,
         satData: IrrigationConfigGeneralSatConfig,
         ): String? {
@@ -528,32 +529,6 @@ class DeviceViewModel @Inject constructor(
         //post sat data
         val satConfigData = mutableMapOf<String, String>()
         satConfigData["S70"] = satData.plantOperationStatus!!
-        satConfigData["S1000"] = satData.password!!
-        satConfigData["S1002"] = satData.solarIntensity!!
-        satConfigData["S1003"] = satData.windSpeed!!
-        satConfigData["S1005"] = satData.evMaster!!
-        satConfigData["S1006"] = satData.ecCommand!!
-        satConfigData["S1007"] = satData.pulsesFlow!!
-        satConfigData["S1008"] = satData.solarIrradiation!!
-        satConfigData["S1009"] = satData.windSensor!!
-        satConfigData["S1010"] = satData.temperature!!
-        satConfigData["S1011"] = satData.humidity!!
-        satConfigData["S1012"] = satData.maxActiveProgram!!
-        satConfigData["S1013"] = satData.entry1!!
-        satConfigData["S1014"] = satData.entry2!!
-        satConfigData["S1017"] = satData.entry1forDelay!!
-        satConfigData["S1018"] = satData.entry2forDelay!!
-        satConfigData["S1019"] = satData.flowOffTolerance!!
-        satConfigData["S1020"] = satData.flowOff!!
-        satConfigData["S1021"] = satData.flowAlarmDelay!!
-        satConfigData["S1032"] = satData.entry3!!
-        satConfigData["S1033"] = satData.entry4!!
-        satConfigData["S1036"] = satData.entry3forDelay!!
-        satConfigData["S1037"] = satData.entry4forDelay!!
-        satConfigData["S1045"] = satData.pressureMin!!
-        satConfigData["S1046"] = satData.pressureMax!!
-        satConfigData["S1047"] = satData.delayAlarmTimeLowPressure!!
-        satConfigData["S1048"] = satData.delayAlarmTimeHighPressure!!
 
         val resultSatConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATCONFIG", satConfigData)
 
@@ -1128,7 +1103,9 @@ class DeviceViewModel @Inject constructor(
         val humiditySensorLevelCode = "S" + (baseReg + 20)
 
         val data = mutableMapOf<String, String>()
-        data[humiditySensorTypeCode] = postData.humiditySensorType!!
+        if (postData.humiditySensorType != null) {
+            data[humiditySensorTypeCode] = postData.humiditySensorType!!
+        }
         data[waterBudgetCode] = if(postData.waterBudgetAuto) "255" else postData.waterBudget!!
         data[programStopCode] = postData.programStop!!
         data[programStandByCode] = postData.programStandBy!!
@@ -1138,7 +1115,9 @@ class DeviceViewModel @Inject constructor(
         data[highTempCode] = postData.highTemp!!
         data[lowHumidityCode] = postData.lowHumidity!!
         data[highHumidityCode] = postData.highHumidity!!
-        data[humiditySensorLevelCode] = postData.humiditySensorLevel!!
+        if (postData.humiditySensorLevel != null) {
+            data[humiditySensorLevelCode] = postData.humiditySensorLevel!!
+        }
 
         val resultSatPRGConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATPRGCONFIG$programNum", data)
 
@@ -1147,7 +1126,14 @@ class DeviceViewModel @Inject constructor(
 
     suspend fun getIrrigationStatusProgramStatus(deviceCode: String): Pair<List<IrrigationStatusProgramStatus?>, String> {
         var fields =""
-        for (i in 40000..40029) {
+        var lastField = when (BuildConfig.FLAVOR) {
+            "idroRes" -> {
+                40007
+            } else -> {
+                40029
+            }
+        }
+        for (i in 40000..lastField) {
             if (i != 40000) {
                 fields += ","
             }
@@ -1357,49 +1343,6 @@ class DeviceViewModel @Inject constructor(
                     value = data[instantConsumptionPump1Code] ?: "-",
                 )
             )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 2",
-                    value = data[instantConsumptionPump2Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 3",
-                    value = data[instantConsumptionPump3Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 4",
-                    value = data[instantConsumptionPump4Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 5",
-                    value = data[instantConsumptionPump5Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 6",
-                    value = data[instantConsumptionPump6Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 7",
-                    value = data[instantConsumptionPump7Code] ?: "-",
-                )
-            )
-            irrigationStatusIdrosatStatusInstantConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 8",
-                    value = data[instantConsumptionPump8Code] ?: "-",
-                )
-            )
-
 
             //total consumption data
             irrigationStatusIdrosatStatusTotalConsumption.add(
@@ -1408,48 +1351,96 @@ class DeviceViewModel @Inject constructor(
                     value = data[totalConsumptionPump1Code] ?: "-",
                 )
             )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 2",
-                    value = data[totalConsumptionPump2Code] ?: "-",
+
+            if (BuildConfig.FLAVOR != "idroRes" && BuildConfig.FLAVOR != "irriLife") {
+                //instant consumption data
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 2",
+                        value = data[instantConsumptionPump2Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 3",
-                    value = data[totalConsumptionPump3Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 3",
+                        value = data[instantConsumptionPump3Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 4",
-                    value = data[totalConsumptionPump4Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 4",
+                        value = data[instantConsumptionPump4Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 5",
-                    value = data[totalConsumptionPump5Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 5",
+                        value = data[instantConsumptionPump5Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 6",
-                    value = data[totalConsumptionPump6Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 6",
+                        value = data[instantConsumptionPump6Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 7",
-                    value = data[totalConsumptionPump7Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 7",
+                        value = data[instantConsumptionPump7Code] ?: "-",
+                    )
                 )
-            )
-            irrigationStatusIdrosatStatusTotalConsumption.add(
-                IrrigationStatusIdrosatStatus(
-                    name = "${context.getString(R.string.pump)} 8",
-                    value = data[totalConsumptionPump8Code] ?: "-",
+                irrigationStatusIdrosatStatusInstantConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 8",
+                        value = data[instantConsumptionPump8Code] ?: "-",
+                    )
                 )
-            )
+
+                //total consumption data
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 2",
+                        value = data[totalConsumptionPump2Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 3",
+                        value = data[totalConsumptionPump3Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 4",
+                        value = data[totalConsumptionPump4Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 5",
+                        value = data[totalConsumptionPump5Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 6",
+                        value = data[totalConsumptionPump6Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 7",
+                        value = data[totalConsumptionPump7Code] ?: "-",
+                    )
+                )
+                irrigationStatusIdrosatStatusTotalConsumption.add(
+                    IrrigationStatusIdrosatStatus(
+                        name = "${context.getString(R.string.pump)} 8",
+                        value = data[totalConsumptionPump8Code] ?: "-",
+                    )
+                )
+            }
         }
 
         _irrigationStatusIdrosatStatusInstantConsumption.value = irrigationStatusIdrosatStatusInstantConsumption
@@ -1526,7 +1517,12 @@ class DeviceViewModel @Inject constructor(
 
             if (!dataPrograms.isNullOrEmpty()) {
                 val programSplit = dataPrograms.split(",")
-                for (i in 1..30) {
+                var dataCount = 30
+
+                if (BuildConfig.FLAVOR == "idroRes" || BuildConfig.FLAVOR == "irriLife") {
+                    dataCount = 8
+                }
+                for (i in 1..dataCount) {
                     manualStartProgram.add(
                         ManualStartProgram(
                             name = "${context.getString(R.string.program)} $i",
@@ -1690,10 +1686,10 @@ class DeviceViewModel @Inject constructor(
                     val exists = evConfigData.find { it.evSerial == i?.evSerial }
                     if (exists != null) {
                         i?.stationNumber = exists.station
-                    }
 
-                    i?.status =  if (activeStation.contains(i?.stationNumber)) "1" else "0"
-                    deviceGeoItem.add(i)
+                        i?.status =  if (activeStation.contains(i?.stationNumber)) "1" else "0"
+                        deviceGeoItem.add(i)
+                    }
                 }
             }
         }
@@ -1821,33 +1817,35 @@ class DeviceViewModel @Inject constructor(
                         it.first == stationID
                     }
 
-                    val evs = evConfigData.filter {
-                        it.station == stationID
-                    }
-
-                    var evJoin = ""
-                    for ((index, ev) in evs.withIndex()) {
-                        evJoin += "${ev.evSerial}"
-                        if (index != evs.size - 1) {
-                            evJoin += "\n"
+                    if (group != null) {
+                        val evs = evConfigData.filter {
+                            it.station == stationID
                         }
+
+                        var evJoin = ""
+                        for ((index, ev) in evs.withIndex()) {
+                            evJoin += "${ev.evSerial}"
+                            if (index != evs.size - 1) {
+                                evJoin += "\n"
+                            }
+                        }
+
+                        val stationStatus = (data[orderRegister]?.split(",")?.getOrNull(1)) ?: "0"
+
+                        val addedData = StationDuration(
+                            station = stationID,
+                            group = group?.second ?: "",
+                            ev = evJoin,
+                            status = stationStatus,
+                            flowMode = flowMode,
+                            hour = hour,
+                            minute = minute,
+                            second = second,
+                            volume = volume,
+                        )
+
+                        stationDurationData.add(addedData)
                     }
-
-                    val stationStatus = (data[orderRegister]?.split(",")?.getOrNull(1)) ?: "0"
-
-                    val addedData = StationDuration(
-                        station = stationID,
-                        group = group?.second ?: "",
-                        ev = evJoin,
-                        status = stationStatus,
-                        flowMode = flowMode,
-                        hour = hour,
-                        minute = minute,
-                        second = second,
-                        volume = volume,
-                    )
-
-                    stationDurationData.add(addedData)
                 }
             }
         }
@@ -1929,5 +1927,9 @@ class DeviceViewModel @Inject constructor(
         val resultMVConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATSTAT", mvConfigData)
 
         return if (resultMVConfig.first) null else resultMVConfig.second
+    }
+    suspend fun postFastWatering(deviceCode: String, status: Boolean): String? {
+        val result = deviceService.postFastWatering(deviceCode, status)
+        return if (result.first) null else result.second
     }
 }

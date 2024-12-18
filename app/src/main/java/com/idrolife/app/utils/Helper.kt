@@ -5,6 +5,7 @@ import android.view.Window
 import androidx.core.view.WindowCompat
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
 
 class Helper {
     fun setNotifBarColor(view: View, window: Window, color: Int, darkIcon: Boolean) {
@@ -23,9 +24,10 @@ class Helper {
         for (format in dateFormat) {
             try {
                 val inputFormatter = SimpleDateFormat(format, Locale.getDefault())
+                inputFormatter.timeZone = TimeZone.getTimeZone("UTC")
                 val date = inputFormatter.parse(date)
                 val outputFormatter = SimpleDateFormat(expectedFormat, Locale.getDefault())
-
+                outputFormatter.timeZone = TimeZone.getDefault()
                 return outputFormatter.format(date!!)
             } catch (e: Exception) {
 

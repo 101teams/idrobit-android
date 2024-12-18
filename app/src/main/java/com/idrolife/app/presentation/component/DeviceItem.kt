@@ -23,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,13 +34,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.device.DevicesItem
+import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.GrayVeryVeryLight
+import com.idrolife.app.theme.GreenLight2
 import com.idrolife.app.theme.Manrope
-import com.idrolife.app.theme.PrimaryLight2
 import com.idrolife.app.theme.White
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -73,6 +78,10 @@ fun DeviceStatusCard(
     selectedDeviceCode: MutableState<String>,
 ) {
     if (data != null) {
+
+        val scope = rememberCoroutineScope()
+        val viewModel = hiltViewModel<DeviceViewModel>()
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,7 +120,7 @@ fun DeviceStatusCard(
                                     .padding(end = 8.dp)
                                     .size(10.dp)
                                     .clip(RoundedCornerShape(5.dp))
-                                    .background(if (data.status?.lowercase() == "online") PrimaryLight2 else Color.Red)
+                                    .background(if (data.status?.lowercase() == "online") GreenLight2 else Color.Red)
                             )
                             Text(text = data.name ?: "-", fontSize = 20.sp, color = Color.Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
                         }
@@ -148,7 +157,7 @@ fun DeviceStatusCard(
                 DataFieldHorizontal(label = stringResource(id = R.string.instant_consumption), value = data.consumption.toString())
                 DataFieldHorizontal(label = stringResource(id = R.string.flow), value = data.flow ?: "-")
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 // Active Programs and Stations
                 Row(
@@ -188,6 +197,42 @@ fun DeviceStatusCard(
                         ) {
                             Text(text = stringResource(id = R.string.active_station), fontSize = 14.sp, color = Black, fontFamily = Manrope, fontWeight = FontWeight.Medium)
                             Text(text = data.activeStation ?: "-", fontSize = 16.sp, color = Black, fontFamily = Manrope, fontWeight = FontWeight.SemiBold)
+                        }
+                    }
+                }
+
+                if (BuildConfig.FLAVOR == "idroPro") {
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                GrayVeryVeryLight,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(text = stringResource(id = R.string.fast_watering), fontSize = 14.sp, color = Black, fontFamily = Manrope, fontWeight = FontWeight.Medium)
+
+                            SmallToggleWithTitle(
+                                field = null,
+                                checkedTitle = "ON",
+                                uncheckedTitle = "OFF",
+                                modifier = Modifier.width(70.dp),
+                                selectedValue = data.isFastWatering == true,
+                                onChecked = {checked ->
+                                    scope.launch {
+                                        viewModel.postFastWatering(data.code ?: "", checked)
+                                    }
+                                }
+                            )
                         }
                     }
                 }

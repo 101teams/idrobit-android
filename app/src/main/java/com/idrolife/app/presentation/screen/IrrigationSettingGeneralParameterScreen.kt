@@ -71,6 +71,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.irrigation.IrrigationSettingGeneralParameter
 import com.idrolife.app.data.api.irrigation.IrrigationSettingScheduleStart
@@ -91,9 +92,9 @@ import com.idrolife.app.theme.Gray
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryLight
 import com.idrolife.app.theme.GrayVeryVeryLight
+import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
-import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -284,38 +285,53 @@ fun IrrigationSettingGeneralParameterPage1(viewModel: DeviceViewModel, deviceCod
 
                     DropDown(
                         field = stringResource(id = R.string.program_number),
-                        mutableListOf(
-                            Pair("1","1"),
-                            Pair("2","2"),
-                            Pair("3","3"),
-                            Pair("4","4"),
-                            Pair("5","5"),
-                            Pair("6","6"),
-                            Pair("7","7"),
-                            Pair("8","8"),
-                            Pair("9","9"),
-                            Pair("10","10"),
-                            Pair("11","11"),
-                            Pair("12","12"),
-                            Pair("13","13"),
-                            Pair("14","14"),
-                            Pair("15","15"),
-                            Pair("16","16"),
-                            Pair("17","17"),
-                            Pair("18","18"),
-                            Pair("19","19"),
-                            Pair("20","20"),
-                            Pair("21","21"),
-                            Pair("22","22"),
-                            Pair("23","23"),
-                            Pair("24","24"),
-                            Pair("25","25"),
-                            Pair("26","26"),
-                            Pair("27","27"),
-                            Pair("28","28"),
-                            Pair("29","29"),
-                            Pair("30","30"),
-                        ),
+                        when(BuildConfig.FLAVOR) {
+                            "idroRes", "irriLife" -> {
+                                mutableListOf(
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                )
+                            } else -> {
+                                mutableListOf(
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                    Pair("9","9"),
+                                    Pair("10","10"),
+                                    Pair("11","11"),
+                                    Pair("12","12"),
+                                    Pair("13","13"),
+                                    Pair("14","14"),
+                                    Pair("15","15"),
+                                    Pair("16","16"),
+                                    Pair("17","17"),
+                                    Pair("18","18"),
+                                    Pair("19","19"),
+                                    Pair("20","20"),
+                                    Pair("21","21"),
+                                    Pair("22","22"),
+                                    Pair("23","23"),
+                                    Pair("24","24"),
+                                    Pair("25","25"),
+                                    Pair("26","26"),
+                                    Pair("27","27"),
+                                    Pair("28","28"),
+                                    Pair("29","29"),
+                                    Pair("30","30"),
+                                )
+                            }
+                        },
                         Modifier.fillMaxWidth(),
                         selectedValue = programNum.toString(),
                         onSelectItem = { _, it ->
@@ -360,27 +376,29 @@ fun IrrigationSettingGeneralParameterPage1(viewModel: DeviceViewModel, deviceCod
                             }
                         )
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                            Spacer(modifier = Modifier.width(8.dp))
 
-                        DropDown(
-                            field = stringResource(id = R.string.minifert_program_related),
-                            mutableListOf(
-                                Pair("OFF","0"),
-                                Pair("1","1"),
-                                Pair("2","2"),
-                                Pair("3","3"),
-                                Pair("4","4"),
-                                Pair("5","5"),
-                                Pair("6","6"),
-                                Pair("7","7"),
-                                Pair("8","8"),
-                            ),
-                            Modifier.weight(1f),
-                            selectedValue = viewModel.irrigationSettingGeneralParameter.value?.minifertProgramRelated ?: "0",
-                            onSelectItem = { _, it ->
-                                viewModel.irrigationSettingGeneralParameter.value?.minifertProgramRelated = it
-                            }
-                        )
+                            DropDown(
+                                field = stringResource(id = R.string.minifert_program_related),
+                                mutableListOf(
+                                    Pair("OFF","0"),
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                ),
+                                Modifier.weight(1f),
+                                selectedValue = viewModel.irrigationSettingGeneralParameter.value?.minifertProgramRelated ?: "0",
+                                onSelectItem = { _, it ->
+                                    viewModel.irrigationSettingGeneralParameter.value?.minifertProgramRelated = it
+                                }
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -500,28 +518,30 @@ fun IrrigationSettingGeneralParameterPage1(viewModel: DeviceViewModel, deviceCod
                             columnCount = 1,
                         )
 
-                        Spacer(modifier = Modifier.width(4.dp))
+                        if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                            Spacer(modifier = Modifier.width(4.dp))
 
-                        VerticalMultipleCheckWithTitle(
-                            field = stringResource(id = R.string.second_week),
-                            items = mutableListOf(
-                                Pair(stringResource(id = R.string.monday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(7) == '1'),
-                                Pair(stringResource(id = R.string.tuesday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(8) == '1'),
-                                Pair(stringResource(id = R.string.wednesday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(9) == '1'),
-                                Pair(stringResource(id = R.string.thursday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(10) == '1'),
-                                Pair(stringResource(id = R.string.friday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(11) == '1'),
-                                Pair(stringResource(id = R.string.saturday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(12) == '1'),
-                                Pair(stringResource(id = R.string.sunday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(13) == '1'),
-                            ),
-                            modifier = Modifier.weight(1f),
-                            onChecked = {index, data ->
-                                val charArray = viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.toCharArray()
-                                charArray!![index + 7] = if(data.second) '1' else '0'
-                                viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar = String(charArray)
-                            },
-                            disableAll = startMode == "1",
-                            columnCount = 1,
-                        )
+                            VerticalMultipleCheckWithTitle(
+                                field = stringResource(id = R.string.second_week),
+                                items = mutableListOf(
+                                    Pair(stringResource(id = R.string.monday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(7) == '1'),
+                                    Pair(stringResource(id = R.string.tuesday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(8) == '1'),
+                                    Pair(stringResource(id = R.string.wednesday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(9) == '1'),
+                                    Pair(stringResource(id = R.string.thursday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(10) == '1'),
+                                    Pair(stringResource(id = R.string.friday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(11) == '1'),
+                                    Pair(stringResource(id = R.string.saturday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(12) == '1'),
+                                    Pair(stringResource(id = R.string.sunday), viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.getOrNull(13) == '1'),
+                                ),
+                                modifier = Modifier.weight(1f),
+                                onChecked = {index, data ->
+                                    val charArray = viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar?.toCharArray()
+                                    charArray!![index + 7] = if(data.second) '1' else '0'
+                                    viewModel.irrigationSettingGeneralParameter.value?.biweeklyCalendar = String(charArray)
+                                },
+                                disableAll = startMode == "1",
+                                columnCount = 1,
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -675,38 +695,53 @@ fun IrrigationSettingGeneralParameterPage2(deviceCode: String, showToast: Mutabl
 
                     DropDown(
                         field = stringResource(id = R.string.program_number),
-                        mutableListOf(
-                            Pair("1","1"),
-                            Pair("2","2"),
-                            Pair("3","3"),
-                            Pair("4","4"),
-                            Pair("5","5"),
-                            Pair("6","6"),
-                            Pair("7","7"),
-                            Pair("8","8"),
-                            Pair("9","9"),
-                            Pair("10","10"),
-                            Pair("11","11"),
-                            Pair("12","12"),
-                            Pair("13","13"),
-                            Pair("14","14"),
-                            Pair("15","15"),
-                            Pair("16","16"),
-                            Pair("17","17"),
-                            Pair("18","18"),
-                            Pair("19","19"),
-                            Pair("20","20"),
-                            Pair("21","21"),
-                            Pair("22","22"),
-                            Pair("23","23"),
-                            Pair("24","24"),
-                            Pair("25","25"),
-                            Pair("26","26"),
-                            Pair("27","27"),
-                            Pair("28","28"),
-                            Pair("29","29"),
-                            Pair("30","30"),
-                        ),
+                        when(BuildConfig.FLAVOR) {
+                            "idroRes", "irriLife" -> {
+                                mutableListOf(
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                )
+                            } else -> {
+                                mutableListOf(
+                                Pair("1","1"),
+                                Pair("2","2"),
+                                Pair("3","3"),
+                                Pair("4","4"),
+                                Pair("5","5"),
+                                Pair("6","6"),
+                                Pair("7","7"),
+                                Pair("8","8"),
+                                Pair("9","9"),
+                                Pair("10","10"),
+                                Pair("11","11"),
+                                Pair("12","12"),
+                                Pair("13","13"),
+                                Pair("14","14"),
+                                Pair("15","15"),
+                                Pair("16","16"),
+                                Pair("17","17"),
+                                Pair("18","18"),
+                                Pair("19","19"),
+                                Pair("20","20"),
+                                Pair("21","21"),
+                                Pair("22","22"),
+                                Pair("23","23"),
+                                Pair("24","24"),
+                                Pair("25","25"),
+                                Pair("26","26"),
+                                Pair("27","27"),
+                                Pair("28","28"),
+                                Pair("29","29"),
+                                Pair("30","30"),
+                            )
+                            }
+                        },
                         Modifier.fillMaxWidth(),
                         selectedValue = programNum.toString(),
                         onSelectItem = { _, it ->
@@ -1279,38 +1314,53 @@ fun IrrigationSettingGeneralParameterPage3(deviceCode: String, showToast: Mutabl
 
                     DropDown(
                         field = stringResource(id = R.string.program_number),
-                        mutableListOf(
-                            Pair("1","1"),
-                            Pair("2","2"),
-                            Pair("3","3"),
-                            Pair("4","4"),
-                            Pair("5","5"),
-                            Pair("6","6"),
-                            Pair("7","7"),
-                            Pair("8","8"),
-                            Pair("9","9"),
-                            Pair("10","10"),
-                            Pair("11","11"),
-                            Pair("12","12"),
-                            Pair("13","13"),
-                            Pair("14","14"),
-                            Pair("15","15"),
-                            Pair("16","16"),
-                            Pair("17","17"),
-                            Pair("18","18"),
-                            Pair("19","19"),
-                            Pair("20","20"),
-                            Pair("21","21"),
-                            Pair("22","22"),
-                            Pair("23","23"),
-                            Pair("24","24"),
-                            Pair("25","25"),
-                            Pair("26","26"),
-                            Pair("27","27"),
-                            Pair("28","28"),
-                            Pair("29","29"),
-                            Pair("30","30"),
-                        ),
+                        when(BuildConfig.FLAVOR) {
+                            "idroRes", "irriLife" -> {
+                                mutableListOf(
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                )
+                            } else -> {
+                                mutableListOf(
+                                    Pair("1","1"),
+                                    Pair("2","2"),
+                                    Pair("3","3"),
+                                    Pair("4","4"),
+                                    Pair("5","5"),
+                                    Pair("6","6"),
+                                    Pair("7","7"),
+                                    Pair("8","8"),
+                                    Pair("9","9"),
+                                    Pair("10","10"),
+                                    Pair("11","11"),
+                                    Pair("12","12"),
+                                    Pair("13","13"),
+                                    Pair("14","14"),
+                                    Pair("15","15"),
+                                    Pair("16","16"),
+                                    Pair("17","17"),
+                                    Pair("18","18"),
+                                    Pair("19","19"),
+                                    Pair("20","20"),
+                                    Pair("21","21"),
+                                    Pair("22","22"),
+                                    Pair("23","23"),
+                                    Pair("24","24"),
+                                    Pair("25","25"),
+                                    Pair("26","26"),
+                                    Pair("27","27"),
+                                    Pair("28","28"),
+                                    Pair("29","29"),
+                                    Pair("30","30"),
+                                )
+                            }
+                        },
                         Modifier.fillMaxWidth(),
                         selectedValue = programNum.toString(),
                         onSelectItem = { _, it ->
@@ -1516,61 +1566,63 @@ fun IrrigationSettingGeneralParameterPage3Card(
                     .padding(vertical = 8.dp, horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        stringResource(id = R.string.shift),
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = Manrope,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            color = GrayLight,
-                        ),
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row {
-                        IconButton(
-                            onClick = {
-                                val currentIndex = viewModel.stationDurationData.value.indexOf(data)
+                if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            stringResource(id = R.string.shift),
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = Manrope,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                color = GrayLight,
+                            ),
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row {
+                            IconButton(
+                                onClick = {
+                                    val currentIndex = viewModel.stationDurationData.value.indexOf(data)
 
-                                if (currentIndex != 0) {
-                                    swapCard(currentIndex, currentIndex - 1)
-                                }
-                            },
-                            modifier = Modifier
-                                .size(36.dp)
-                        ) {
-                            Image(
+                                    if (currentIndex != 0) {
+                                        swapCard(currentIndex, currentIndex - 1)
+                                    }
+                                },
                                 modifier = Modifier
-                                    .size(30.dp),
-                                bitmap = ImageBitmap.imageResource(R.drawable.ic_button_arrow_up_green),
-                                contentDescription = "back button"
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                val currentIndex = viewModel.stationDurationData.value.indexOf(data)
+                                    .size(36.dp)
+                            ) {
+                                Image(
+                                    modifier = Modifier
+                                        .size(30.dp),
+                                    bitmap = ImageBitmap.imageResource(R.drawable.ic_button_arrow_up_green),
+                                    contentDescription = "back button"
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    val currentIndex = viewModel.stationDurationData.value.indexOf(data)
 
-                                if (currentIndex != viewModel._stationDurationData.value.size - 1) {
-                                    swapCard(currentIndex, currentIndex + 1)
-                                }
-                            },
-                            modifier = Modifier
-                                .size(36.dp)
-                        ) {
-                            Image(
+                                    if (currentIndex != viewModel._stationDurationData.value.size - 1) {
+                                        swapCard(currentIndex, currentIndex + 1)
+                                    }
+                                },
                                 modifier = Modifier
-                                    .size(30.dp),
-                                bitmap = ImageBitmap.imageResource(R.drawable.ic_button_arrow_down_green),
-                                contentDescription = "back button"
-                            )
+                                    .size(36.dp)
+                            ) {
+                                Image(
+                                    modifier = Modifier
+                                        .size(30.dp),
+                                    bitmap = ImageBitmap.imageResource(R.drawable.ic_button_arrow_down_green),
+                                    contentDescription = "back button"
+                                )
+                            }
                         }
                     }
+                    Spacer(modifier = Modifier.width(4.dp))
                 }
-                Spacer(modifier = Modifier.width(4.dp))
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -1930,50 +1982,52 @@ fun IrrigationSettingGeneralParameterPage3Card(
                     }
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        "",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = Manrope,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            color = GrayLight,
-                        ),
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    IconButton(
-                        onClick = {
-                            viewModel.setMarkerLoading.value = true
-                            val currentIndex = viewModel.stationDurationData.value.indexOf(data)
-                            val groupItemDataCurrent = groupItemData.value
-                            groupItemDataCurrent.remove(groupItemDataCurrent[currentIndex])
-                            groupItemData.value = groupItemDataCurrent
-
-                            val datax = viewModel.stationDurationData.value.toMutableList()
-                            datax.remove(data)
-                            viewModel._stationDurationData.value = datax
-
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                viewModel.setMarkerLoading.value = false
-                            }, 50)
-                        },
-                        modifier = Modifier
-                            .size(40.dp)
+                    Column(
+                        modifier = Modifier,
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Image(
-                            modifier = Modifier
-                                .height(32.dp)
-                                .width(40.dp),
-                            bitmap = ImageBitmap.imageResource(R.drawable.ic_button_delete_red),
-                            contentDescription = "back button",
-                            contentScale = ContentScale.Fit,
+                        Text(
+                            "",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontFamily = Manrope,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                color = GrayLight,
+                            ),
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        IconButton(
+                            onClick = {
+                                viewModel.setMarkerLoading.value = true
+                                val currentIndex = viewModel.stationDurationData.value.indexOf(data)
+                                val groupItemDataCurrent = groupItemData.value
+                                groupItemDataCurrent.remove(groupItemDataCurrent[currentIndex])
+                                groupItemData.value = groupItemDataCurrent
+
+                                val datax = viewModel.stationDurationData.value.toMutableList()
+                                datax.remove(data)
+                                viewModel._stationDurationData.value = datax
+
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    viewModel.setMarkerLoading.value = false
+                                }, 50)
+                            },
+                            modifier = Modifier
+                                .size(40.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .height(32.dp)
+                                    .width(40.dp),
+                                bitmap = ImageBitmap.imageResource(R.drawable.ic_button_delete_red),
+                                contentDescription = "back button",
+                                contentScale = ContentScale.Fit,
+                            )
+                        }
                     }
                 }
             }

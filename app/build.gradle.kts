@@ -20,9 +20,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../idrolife-keystore.jks")
+            storePassword = "101@team"
+            keyAlias = "idrolife-keystore"
+            keyPassword = "101@team"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -36,22 +46,18 @@ android {
         create("idroLife") {
             dimension = "version"
             applicationId = "com.idrolife.portali"
-            resValue("string", "app_name", "IdroLife +")
         }
         create("idroPro") {
             dimension = "version"
             applicationId = "com.idropro.portali"
-            resValue("string", "app_name", "IdroPro Plus")
         }
         create("idroRes") {
             dimension = "version"
             applicationId = "com.idrores.portali"
-            resValue("string", "app_name", "IdroRes +")
         }
         create("irriLife") {
             dimension = "version"
             applicationId = "com.irrilife.portali"
-            resValue("string", "app_name", "IrriLife")
         }
     }
 

@@ -139,9 +139,9 @@ fun SensorDeviceScreen(
 
                 Button2Image(
                     backgroundColor = White,
-                    leftImage = R.drawable.ic_soil_moisture_green,
+                    leftImage = R.drawable.ic_soil_moisture,
                     title = stringResource(id = R.string.soil_moisture_humidity),
-                    rightImage = R.drawable.ic_arrow_up_green,
+                    rightImage = R.drawable.ic_arrow_up,
                     onClick = {
                         navController.navigate(Screen.SensorSoilMoisture.withArgs(deviceID))
                     },

@@ -1,5 +1,6 @@
 package com.idrolife.app.service
 
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.data.api.HttpRoutes
 import com.idrolife.app.data.api.UnauthorizedException
 import com.idrolife.app.data.api.UnprocessableEntityException
@@ -50,7 +51,16 @@ class DeviceServiceImpl(
 
     override suspend fun getDevices(): Pair<DeviceListResponse?, String> {
         return try {
-            val response = client.get { url("${HttpRoutes.DEVICE}?company=idrolife") }.body<DeviceListResponse>()
+            val company = when(BuildConfig.FLAVOR) {
+                "idroLife" -> {
+                    "idrolife"
+                }"idroPro" -> {
+                    "idropro"
+                } else -> {
+                    "idrores"
+                }
+            }
+            val response = client.get { url("${HttpRoutes.DEVICE}?company=$company") }.body<DeviceListResponse>()
             Pair(response, "")
         } catch (e: UnauthorizedException) {
             Pair(null, "Unauthorized")
@@ -67,7 +77,16 @@ class DeviceServiceImpl(
 
     override suspend fun getDevicesByID(id: String): Pair<DeviceByIDResponse?, String> {
         return try {
-            val response = client.get { url("${HttpRoutes.DEVICE}/${id}?company=idrolife") }.body<DeviceByIDResponse>()
+            val company = when(BuildConfig.FLAVOR) {
+                "idroLife" -> {
+                    "idrolife"
+                }"idroPro" -> {
+                    "idropro"
+                } else -> {
+                    "idrores"
+                }
+            }
+            val response = client.get { url("${HttpRoutes.DEVICE}/${id}?company=$company") }.body<DeviceByIDResponse>()
             Pair(response, "")
         } catch (e: UnauthorizedException) {
             Pair(null, "Unauthorized")
@@ -401,6 +420,34 @@ class DeviceServiceImpl(
             Pair(null, "Error 5xx: ${e.response.status.description}")
         } catch (e: Exception) {
             Pair(null, "Error 3xx: ${e.message}")
+        }
+    }
+
+    override suspend fun postFastWatering(
+        deviceCode: String,
+        status: Boolean
+    ): Pair<Boolean, String> {
+        return try {
+            val postData = mutableMapOf<String, Boolean>()
+            postData["isFastWatering"] = status
+
+            client.post {
+                url("${HttpRoutes.FAST_WATERING}/${deviceCode}")
+                contentType(Json)
+                setBody(postData)
+            }
+
+            Pair(true, "")
+        } catch (e: UnauthorizedException) {
+            Pair(false, "Unauthorized")
+        } catch (e: RedirectResponseException) {
+            Pair(false, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            Pair(false, "Error 4xx: ${e.response.status.description}")
+        } catch (e: ServerResponseException) {
+            Pair(false, "Error 5xx: ${e.response.status.description}")
+        } catch (e: Exception) {
+            Pair(false, "Error 3xx: ${e.message}")
         }
     }
 }

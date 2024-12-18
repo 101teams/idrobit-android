@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Idrolife</string>
+    <string name="app_name">Idrosat</string>
     <string name="done">Gotovo</string>
     <string name="bt_location_request">Pažnja</string>
     <string name="bt_location_request_usage">Morate omogućiti lokaciju za ovaj uređaj</string>
@@ -160,7 +160,6 @@
     <string name="continued">Nastavi</string>
     <string name="edit_plant">Uredi biljku</string>
     <string name="delete_plant">Izbriši biljku</string>
-<!--    need translate-->
     <string name="sensor_setting">Podešavanje senzora</string>
     <string name="low">Bas</string>
     <string name="high">Visoko</string>
@@ -227,7 +226,7 @@
     <string name="number_of_alarm">Broj alarma</string>
     <string name="map">Mapa</string>
     <string name="ev_name">Ime EV</string>
-    <string name="station_serial">Station serial</string>
+    <string name="serial">Serial</string>
     <string name="waiting_for_departure">Čeka se polazak</string>
     <string name="mv_active">MV aktivan</string>
     <string name="pause">Pauza</string>
@@ -242,4 +241,13 @@
     <string name="list_alarms">Lista alarma</string>
     <string name="reset">Resetuj</string>
     <string name="level">Niv</string>
+    <!--    need translate-->
+    <string name="fast_watering">Fast Watering</string>
+    <string name="password_must_match">Password must match</string>
+    <string name="email_must_valid">Email address must be a valid email</string>
+    <string name="success_register_title">We have sent an activation message to your email</string>
+    <string name="success_register_body">Check your mailbox and confirm your activation, then login here</string>
+    <string name="here">Here</string>
+    <string name="success_reset_password">Password reset email successfully sent</string>
+    <string name="failed_reset_password">Password not resetting</string>
 </resources>

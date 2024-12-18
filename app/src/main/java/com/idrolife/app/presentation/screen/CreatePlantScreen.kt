@@ -70,6 +70,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.common.InputImage
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.device.CreatePlantRequest
 import com.idrolife.app.navigation.Screen
@@ -86,6 +87,7 @@ import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
+import com.idrolife.app.theme.PrimarySoft
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import com.idrolife.app.utils.SystemBroadcastReceiver
@@ -388,8 +390,22 @@ fun CreatePlantPage1(viewModel: DeviceViewModel, navController: NavController, s
                             checkedPermission = false
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = White,),
-                    border = BorderStroke(1.dp, Primary),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = when(BuildConfig.FLAVOR) {
+                          "idroPro", "idroRes", "irriLife" -> {
+                              PrimarySoft
+                          } else -> {
+                              White
+                          }
+                       }
+                    ,),
+                    border = BorderStroke(1.dp, when(BuildConfig.FLAVOR) {
+                        "idroPro", "idroRes", "irriLife" -> {
+                            PrimarySoft
+                        } else -> {
+                            Primary
+                        }
+                    }),
                 ) {
                     if (getLocationLoading) {
                         CircularProgressIndicator(
@@ -697,8 +713,22 @@ fun CreatePlantPage2(viewModel: DeviceViewModel, navController: NavController, s
                                 checkedPermission = false
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = White,),
-                        border = BorderStroke(1.dp, Primary),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = when(BuildConfig.FLAVOR) {
+                                "idroPro", "idroRes", "irriLife" -> {
+                                    PrimarySoft
+                                } else -> {
+                                    White
+                                }
+                            }
+                            ,),
+                        border = BorderStroke(1.dp, when(BuildConfig.FLAVOR) {
+                            "idroPro", "idroRes", "irriLife" -> {
+                                PrimarySoft
+                            } else -> {
+                                Primary
+                            }
+                        }),
                     ) {
                         if (getLocationLoading) {
                             CircularProgressIndicator(

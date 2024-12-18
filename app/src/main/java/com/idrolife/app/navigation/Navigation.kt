@@ -131,7 +131,7 @@ fun Navigation() {
         }
 
         composable(
-            route = Screen.DetailDevice.route + "/{deviceID}/{deviceName}/{deviceCode}",
+            route = Screen.DetailDevice.route + "/{deviceID}/{deviceName}/{deviceCode}/{deviceRole}",
             arguments = listOf(
                 navArgument("deviceID") {
                     type = NavType.StringType
@@ -145,6 +145,10 @@ fun Navigation() {
                     type = NavType.StringType
                     nullable = false
                 },
+                navArgument("deviceRole") {
+                    type = NavType.StringType
+                    nullable = false
+                },
             ),
             exitTransition = exitTransition,
             popExitTransition = popExitTransition,
@@ -154,7 +158,8 @@ fun Navigation() {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceName = it.arguments?.getString("deviceName") ?: ""
             val deviceCode = it.arguments?.getString("deviceCode") ?: ""
-            DetailDeviceScreen(navController, deviceID, deviceName, deviceCode)
+            val deviceRole = it.arguments?.getString("deviceRole") ?: ""
+            DetailDeviceScreen(navController, deviceID, deviceName, deviceCode, deviceRole)
         }
 
         composable(
@@ -192,13 +197,17 @@ fun Navigation() {
         }
 
         composable(
-            route = Screen.IrrigationDevice.route + "/{deviceID}/{deviceCode}",
+            route = Screen.IrrigationDevice.route + "/{deviceID}/{deviceCode}/{deviceRole}",
             arguments = listOf(
                 navArgument("deviceID") {
                     type = NavType.StringType
                     nullable = false
                 },
                 navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceRole") {
                     type = NavType.StringType
                     nullable = false
                 },
@@ -210,7 +219,8 @@ fun Navigation() {
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceCode = it.arguments?.getString("deviceCode") ?: ""
-            IrrigationDeviceScreen(navController, deviceID, deviceCode)
+            val deviceRole = it.arguments?.getString("deviceRole") ?: ""
+            IrrigationDeviceScreen(navController, deviceID, deviceCode, deviceRole)
         }
 
         composable(
@@ -535,13 +545,17 @@ fun Navigation() {
         }
 
         composable(
-            route = Screen.FertigationDevice.route + "/{deviceID}/{deviceCode}",
+            route = Screen.FertigationDevice.route + "/{deviceID}/{deviceCode}/{deviceRole}",
             arguments = listOf(
                 navArgument("deviceID") {
                     type = NavType.StringType
                     nullable = false
                 },
                 navArgument("deviceCode") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument("deviceRole") {
                     type = NavType.StringType
                     nullable = false
                 },
@@ -553,7 +567,8 @@ fun Navigation() {
         ) {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceCode = it.arguments?.getString("deviceCode") ?: ""
-            FertigationDeviceScreen(navController, deviceID, deviceCode)
+            val deviceRole = it.arguments?.getString("deviceRole") ?: ""
+            FertigationDeviceScreen(navController, deviceID, deviceCode, deviceRole)
         }
 
         composable(

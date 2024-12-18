@@ -25,6 +25,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
 import com.idrolife.app.theme.Black
@@ -54,9 +57,10 @@ import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.DefaultRed
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryLight
+import com.idrolife.app.theme.GreenLight2
+import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
-import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -99,7 +103,7 @@ fun TopToastDialog(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_idrolife),
+                        painter = painterResource(id = R.drawable.img_idrolife_white),
                         contentDescription = "Center Image",
                         modifier = Modifier
                             .height(24.dp)
@@ -322,7 +326,18 @@ fun DialogEditPlant(
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = if (selectedEditDevice.value.isNotEmpty() && name.value.isNotEmpty()) Primary2 else GrayLight,
+                            backgroundColor = if (selectedEditDevice.value.isNotEmpty() && name.value.isNotEmpty()) {
+                                when(BuildConfig.FLAVOR) {
+                                    "idroPro", "idroRes", "irriLife" -> {
+                                        GreenLight2
+                                    } else -> {
+                                        Primary2
+                                    }
+                                }
+                            }
+                            else {
+                                GrayLight
+                             },
                         ),
                     ) {
                         if (isLoading.value) {
@@ -662,6 +677,91 @@ fun DialogShowErrorDevice(
                                 Text(stringResource(id = R.string.reset), style = MaterialTheme.typography.button, fontSize = 18.sp, color = Primary)
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DialogSuccessRegister(
+    onDismiss: () -> Unit,
+    onClickContinue: () -> Unit,
+){
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    BrokenWhite,
+                ),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Primary)
+                        .padding(vertical = 18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_idrolife_white),
+                        contentDescription = "Center Image",
+                        modifier = Modifier
+                            .height(36.dp),
+                        contentScale = ContentScale.Fit,
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 14.dp),
+                        text = stringResource(id = R.string.success_register_title),
+                        color = Primary,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    Text(
+                        modifier = Modifier.padding(top = 14.dp),
+                        text = stringResource(id = R.string.success_register_body),
+                        color = Primary,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center,
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.Normal,
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    TextButton(
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
+                        onClick = {
+                            onDismiss()
+                            onClickContinue()
+                        },
+                    ) {
+                        Text(
+                            modifier = Modifier,
+                            text = stringResource(id = R.string.here),
+                            style = TextStyle(
+                                fontFamily = Manrope,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Primary,
+                            ),
+                        )
                     }
                 }
             }

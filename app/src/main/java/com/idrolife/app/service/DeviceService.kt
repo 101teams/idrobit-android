@@ -32,4 +32,5 @@ interface DeviceService {
     suspend fun editRelatedDevice(data: EditPlantRequest, id: Int): Pair<Boolean, String>
     suspend fun deleteRelatedDevice(id: Int): Pair<Boolean, String>
     suspend fun getDeviceAlarm(deviceCode: String, language: String): Pair<DeviceAlarmsResponse?, String>
+    suspend fun postFastWatering(deviceCode: String, status:Boolean): Pair<Boolean, String>
 }

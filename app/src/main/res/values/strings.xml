@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Idrolife</string>
+    <string name="app_name">Idrosat</string>
     <string name="done">Done</string>
     <string name="bt_location_request">Attention</string>
     <string name="bt_location_request_usage">You need to turn on Location of this device</string>
@@ -226,7 +226,7 @@
     <string name="number_of_alarm">Number of Alarm</string>
     <string name="map">Map</string>
     <string name="ev_name">EV Name</string>
-    <string name="station_serial">Station Serial</string>
+    <string name="serial">Serial</string>
     <string name="waiting_for_departure">Waiting for Departure</string>
     <string name="mv_active">MV Active</string>
     <string name="pause">Pause</string>
@@ -241,4 +241,12 @@
     <string name="list_alarms">List Alarms</string>
     <string name="reset">Reset</string>
     <string name="level">Level</string>
+    <string name="fast_watering">Fast Watering</string>
+    <string name="password_must_match">Password must match</string>
+    <string name="email_must_valid">Email address must be a valid email</string>
+    <string name="success_register_title">We have sent an activation message to your email</string>
+    <string name="success_register_body">Check your mailbox and confirm your activation, then login here</string>
+    <string name="here">Here</string>
+    <string name="success_reset_password">Password reset email successfully sent</string>
+    <string name="failed_reset_password">Password not resetting</string>
 </resources>

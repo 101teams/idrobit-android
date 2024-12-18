@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -51,6 +53,7 @@ import androidx.core.content.ContextCompat.getString
 import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.auth.AuthRequest
 import com.idrolife.app.navigation.Screen
@@ -83,7 +86,6 @@ fun LoginScreen(
 
     val scope = rememberCoroutineScope()
     val viewModel = hiltViewModel<AuthViewModel>()
-    val loading = viewModel.loading.value
     val focusManager = LocalFocusManager.current
 
     val prefManager = PrefManager(context)
@@ -132,6 +134,7 @@ fun LoginScreen(
         focusManager.clearFocus()
 
         scope.launch {
+            viewModel.loading.value = true
             val error = viewModel.login(request)
 
             if (error == null) {
@@ -145,6 +148,7 @@ fun LoginScreen(
             } else {
                 showToast(error, Toast.LENGTH_LONG)
             }
+            viewModel.loading.value = false
         }
     }
 
@@ -166,28 +170,63 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 210.dp, start = 24.dp, end = 24.dp),
+                .padding(top = when(BuildConfig.FLAVOR)
+                {
+                    "idroLife" -> {
+                        210.dp
+                    } else -> {
+                        200.dp
+                    }
+                },
+                    start = 24.dp,
+                    end = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_idrolife),
+                painter = painterResource(id = R.drawable.img_idrolife_white),
                 contentDescription = "Center Image",
                 modifier = Modifier
-                    .height(100.dp)
-                    .width(100.dp)
+                    .height(
+                        when (BuildConfig.FLAVOR) {
+                            "idroLife" -> {
+                                100.dp
+                            }
+                            "idroPro", "idroRes" , "irriLife" -> {
+                                50.dp
+                            }
+                            else -> {
+                                100.dp
+                            }
+                        }
+                    )
+                    .width(
+                        when (BuildConfig.FLAVOR) {
+                            "idroLife" -> {
+                                100.dp
+                            }
+                            "idroPro", "idroRes", "irriLife" -> {
+                                200.dp
+                            }
+                            else -> {
+                                100.dp
+                            }
+                        }
+                    )
                     .fillMaxWidth(),
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
             )
-            
-            Text(
-                text = "IdroLife",
-                style = TextStyle(
-                    fontFamily = Manrope,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Primary,
-                    fontSize = 32.sp
+
+            if (BuildConfig.FLAVOR == "idroLife") {
+                Text(
+                    text = "IdroLife",
+                    style = TextStyle(
+                        fontFamily = Manrope,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Primary,
+                        fontSize = 32.sp
+                    )
                 )
-            )
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -236,7 +275,18 @@ fun LoginScreen(
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
             ) {
-                Text(stringResource(id = R.string.login), style = MaterialTheme.typography.button, fontSize = 18.sp)
+                if (viewModel.loading.value) {
+                    CircularProgressIndicator(
+                        color = White,
+                        strokeCap = StrokeCap.Round,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier
+                            .width(18.dp)
+                            .height(18.dp)
+                    )
+                } else {
+                    Text(stringResource(id = R.string.login), style = MaterialTheme.typography.button, fontSize = 18.sp)
+                }
             }
 
             Row(

@@ -37,6 +37,7 @@ fun FertigationDeviceScreen(
     navController: NavController,
     deviceID: String,
     deviceCode: String,
+    deviceRole: String,
 ) {
     val context = LocalContext.current
 
@@ -99,25 +100,27 @@ fun FertigationDeviceScreen(
         Column(
             modifier = Modifier.padding(24.dp)
         ) {
-            Button2Image(
-                White,
-                R.drawable.ic_fertigation_programmation_green,
-                stringResource(id = R.string.fertigation_programmation),
-                R.drawable.ic_arrow_up_green,
-                onClick = {
-                    navController.navigate(Screen.FertigationProgrammation.withArgs(deviceID, deviceCode))
-                },
-                Primary2,
-                Primary2,
-            )
+            if (deviceRole != "user") {
+                Button2Image(
+                    White,
+                    R.drawable.ic_fertigation_programmation_green,
+                    stringResource(id = R.string.fertigation_programmation),
+                    R.drawable.ic_arrow_up,
+                    onClick = {
+                        navController.navigate(Screen.FertigationProgrammation.withArgs(deviceID, deviceCode))
+                    },
+                    Primary2,
+                    Primary2,
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
+            }
 
             Button2Image(
                 White,
                 R.drawable.ic_fertigation_status_green,
                 stringResource(id = R.string.fertigation_status),
-                R.drawable.ic_arrow_up_green,
+                R.drawable.ic_arrow_up,
                 onClick = {
                     navController.navigate(Screen.FertigationStatus.withArgs(deviceID, deviceCode))
                 },

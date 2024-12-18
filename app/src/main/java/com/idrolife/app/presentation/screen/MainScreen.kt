@@ -77,6 +77,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.data.api.device.EditPlantRequest
 import com.idrolife.app.navigation.Screen
@@ -96,6 +97,7 @@ import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.PrimaryLight
+import com.idrolife.app.theme.PrimarySoft
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import com.idrolife.app.utils.PrefManager
@@ -167,11 +169,27 @@ fun MainScreen(
             .padding(vertical = 12.dp)
         ){
             Image(
-                painter = painterResource(id = R.drawable.img_idrolife_white),
+                painter = painterResource(id = if (BuildConfig.FLAVOR == "irriLife") {
+                    R.drawable.img_idrolife_white
+                } else {
+                    R.drawable.ic_idrolife
+                }),
                 contentDescription = "Center Image",
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .height(52.dp)
+                    .height(
+                        when(BuildConfig.FLAVOR) {
+                            "idroLife" -> {
+                                52.dp
+                            }
+                            "idroPro", "idroRes", "irriLife" -> {
+                                36.dp
+                            }
+                            else -> {
+                                52.dp
+                            }
+                        }
+                    )
                     .width(260.dp),
                 contentScale = ContentScale.Fit,
             )
@@ -491,7 +509,7 @@ fun Tab1(navController: NavController, viewModel: DeviceViewModel){
                         DeviceStatusCard(
                             data = device,
                             onClick = {
-                                navController.navigate(Screen.DetailDevice.withArgs(device?.id.toString(), device?.name ?: "", device?.code ?: ""))
+                                navController.navigate(Screen.DetailDevice.withArgs(device?.id.toString(), device?.name ?: "", device?.code ?: "", device?.role ?: ""))
                             },
                             showDeviceError = showDeviceError,
                             selectedDeviceCode =  selectedDeviceCode,
@@ -614,8 +632,7 @@ fun Tab2(navController: NavController){
         Box(
             modifier = Modifier
                 .padding(vertical = 24.dp)
-                .background(
-                    Color(0xFFDFF4DD),
+                .background(PrimarySoft,
                     shape = RoundedCornerShape(14.dp)
                 )
                 .size(280.dp),

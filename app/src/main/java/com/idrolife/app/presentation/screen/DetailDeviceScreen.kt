@@ -43,6 +43,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.component.Button2Image
@@ -63,6 +64,7 @@ fun DetailDeviceScreen(
     deviceID: String,
     deviceName: String,
     deviceCode: String,
+    deviceRole: String,
 ) {
     val context = LocalContext.current
 
@@ -126,19 +128,21 @@ fun DetailDeviceScreen(
                 modifier = Modifier.padding(24.dp)
             ) {
                 item {
-                    Button2Image(
-                        Primary2,
-                        R.drawable.ic_sensor_white,
-                        stringResource(R.string.sensors),
-                        R.drawable.ic_arrow_up_white,
-                        onClick = {
-                            navController.navigate(Screen.SensorDevice.withArgs(deviceID))
-                        },
-                        null,
-                        null,
-                    )
+                    if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                        Button2Image(
+                            Primary2,
+                            R.drawable.ic_sensor_white,
+                            stringResource(R.string.sensors),
+                            R.drawable.ic_arrow_up_white,
+                            onClick = {
+                                navController.navigate(Screen.SensorDevice.withArgs(deviceID))
+                            },
+                            null,
+                            null,
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
 
                     Button2Image(
                         Primary2,
@@ -146,7 +150,7 @@ fun DetailDeviceScreen(
                         stringResource(id = R.string.irrigation),
                         R.drawable.ic_arrow_up_white,
                         onClick = {
-                            navController.navigate(Screen.IrrigationDevice.withArgs(deviceID, deviceCode))
+                            navController.navigate(Screen.IrrigationDevice.withArgs(deviceID, deviceCode, deviceRole))
                         },
                         null,
                         null,
@@ -154,33 +158,37 @@ fun DetailDeviceScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    Button2Image(
-                        Primary2,
-                        R.drawable.ic_fertilizer_white,
-                        stringResource(id = R.string.fertigation),
-                        R.drawable.ic_arrow_up_white,
-                        onClick = {
-                            navController.navigate(Screen.FertigationDevice.withArgs(deviceID, deviceCode))
-                        },
-                        null,
-                        null,
-                    )
+                    if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                        Button2Image(
+                            Primary2,
+                            R.drawable.ic_fertilizer_white,
+                            stringResource(id = R.string.fertigation),
+                            R.drawable.ic_arrow_up_white,
+                            onClick = {
+                                navController.navigate(Screen.FertigationDevice.withArgs(deviceID, deviceCode, deviceRole))
+                            },
+                            null,
+                            null,
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
 
-                    Button2Image(
-                        Primary2,
-                        R.drawable.ic_map_white,
-                        stringResource(id = R.string.map),
-                        R.drawable.ic_arrow_up_white,
-                        onClick = {
-                            navController.navigate(Screen.Map.withArgs(deviceID, deviceCode))
-                        },
-                        null,
-                        null,
-                    )
+                    if (deviceRole != "user") {
+                        Button2Image(
+                            Primary2,
+                            R.drawable.ic_map_white,
+                            stringResource(id = R.string.map),
+                            R.drawable.ic_arrow_up_white,
+                            onClick = {
+                                navController.navigate(Screen.Map.withArgs(deviceID, deviceCode))
+                            },
+                            null,
+                            null,
+                        )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
 
                     Button2Image(
                         Primary2,
@@ -247,7 +255,7 @@ fun DetailDeviceScreen(
                                     viewModel.irrigationConfigGeneralSatConfig.value?.plantOperationStatus = if(it) "0" else "1"
                                     scope.launch {
                                         viewModel.postDataLoading.value = true
-                                        viewModel.postIrrigationConfigSatConfig(
+                                        viewModel.postRainMode(
                                             deviceCode,
                                             viewModel.irrigationConfigGeneralSatConfig.value!!,
                                         )

@@ -52,9 +52,9 @@ import com.idrolife.app.theme.BrokenWhite
 import com.idrolife.app.theme.Gray
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryVeryLight
+import com.idrolife.app.theme.GreenLight2
 import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
-import com.idrolife.app.theme.PrimaryLight2
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 
@@ -124,7 +124,7 @@ fun IrrigationStatusStationStatusScreen(
     ) {
         NavigationBanner3(
             navController,
-            stringResource(id = R.string.program_status),
+            stringResource(id = R.string.stations_status),
             R.drawable.img_header_detail3,
             viewModel.selectedDevice.value,
             viewModel.isLoading.value,
@@ -159,7 +159,7 @@ fun IrrigationStatusStationStatusScreen(
                                     .padding(end = 8.dp)
                                     .size(10.dp)
                                     .clip(RoundedCornerShape(5.dp))
-                                    .background(if (programStatus.status) PrimaryLight2 else Gray),
+                                    .background(if (programStatus.status) GreenLight2 else Gray),
                             )
 
                             Text(

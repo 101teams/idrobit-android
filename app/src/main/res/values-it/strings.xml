@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Idrolife</string>
+    <string name="app_name">Idrosat</string>
     <string name="done">Fatto </string>
     <string name="bt_location_request">Attenzione </string>
     <string name="bt_location_request_usage">Devi attivare la Posizione di questo dispositivo</string>
@@ -137,9 +137,9 @@
     <string name="active_week">Settimana attiva</string>
     <string name="days_before_start">Giorni prima dell\'inizio</string>
     <string name="minifert_program_related">Programma Minifert associato</string>
-    <string name="minute">Minuto</string>
-    <string name="second">Secondo</string>
-    <string name="hour">Ora</string>
+    <string name="minute">Minuti</string>
+    <string name="second">Secondi</string>
+    <string name="hour">Ore</string>
     <string name="cycles">Cicli</string>
     <string name="time">Ora</string>
     <string name="activate">Attiva</string>
@@ -160,7 +160,6 @@
     <string name="continued">Continua</string>
     <string name="edit_plant">Modifica impianto</string>
     <string name="delete_plant">Elimina impianto</string>
-<!--    need translate-->
     <string name="sensor_setting">Impostazione del sensore</string>
     <string name="low">Basso</string>
     <string name="high">Alto</string>
@@ -227,7 +226,7 @@
     <string name="number_of_alarm">Numero di allarmi</string>
     <string name="map">Mappa</string>
     <string name="ev_name">Nome dell\'EV</string>
-    <string name="station_serial">Seriale della stazione</string>
+    <string name="serial">Seriale</string>
     <string name="waiting_for_departure">Attesa partenza</string>
     <string name="mv_active">MV attiva</string>
     <string name="pause">Pausa</string>
@@ -242,4 +241,13 @@
     <string name="list_alarms">Elenco allarmi</string>
     <string name="reset">Reset</string>
     <string name="level">Livello</string>
+<!--    need translate-->
+    <string name="fast_watering">Fast Watering</string>
+    <string name="password_must_match">Password must match</string>
+    <string name="email_must_valid">Email address must be a valid email</string>
+    <string name="success_register_title">We have sent an activation message to your email</string>
+    <string name="success_register_body">Check your mailbox and confirm your activation, then login here</string>
+    <string name="here">Here</string>
+    <string name="success_reset_password">Password reset email successfully sent</string>
+    <string name="failed_reset_password">Password not resetting</string>
 </resources>

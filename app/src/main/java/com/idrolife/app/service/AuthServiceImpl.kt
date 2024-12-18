@@ -5,6 +5,11 @@ import com.idrolife.app.data.api.HttpRoutes
 import com.idrolife.app.data.api.auth.AuthData
 import com.idrolife.app.data.api.auth.AuthRequest
 import com.idrolife.app.data.api.auth.AuthResponse
+import com.idrolife.app.data.api.forgot_password.ForgotPasswordRequest
+import com.idrolife.app.data.api.forgot_password.ForgotPasswordResponse
+import com.idrolife.app.data.api.register.RegisterData
+import com.idrolife.app.data.api.register.RegisterRequest
+import com.idrolife.app.data.api.register.RegisterResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -52,4 +57,53 @@ class AuthServiceImpl(
         }
     }
 
+    override suspend fun register(request: RegisterRequest): Pair<RegisterData?, String> {
+        return try {
+            val response = client.post {
+                url(HttpRoutes.REGISTER)
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }.body<RegisterResponse>()
+            Pair(response.data, "")
+        } catch (e: RedirectResponseException) {
+            Pair(null, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            val response = e.response.body<ErrorResponse>()
+            Pair(null, response.error)
+        } catch (e: ServerResponseException) {
+            try{
+                val response = e.response.body<ErrorResponse>()
+                Pair(null, response.error)
+            } catch (er: Exception) {
+                Pair(null, "Error 5xx: ${e.response.status.description}")
+            }
+        } catch (e: Exception) {
+            Pair(null, "Error: ${e.message}")
+        }
+    }
+
+    override suspend fun forgotPassword(request: ForgotPasswordRequest, language: String): Pair<ForgotPasswordResponse?, String> {
+        return try {
+            val response = client.post {
+                url(HttpRoutes.FORGOT_PASSWORD + "/$language")
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }.body<ForgotPasswordResponse>()
+            Pair(response, "")
+        } catch (e: RedirectResponseException) {
+            Pair(null, "Error 3xx: ${e.response.status.description}")
+        } catch (e: ClientRequestException) {
+            val response = e.response.body<ErrorResponse>()
+            Pair(null, response.error)
+        } catch (e: ServerResponseException) {
+            try{
+                val response = e.response.body<ErrorResponse>()
+                Pair(null, response.error)
+            } catch (er: Exception) {
+                Pair(null, "Error 5xx: ${e.response.status.description}")
+            }
+        } catch (e: Exception) {
+            Pair(null, "Error: ${e.message}")
+        }
+    }
 }
