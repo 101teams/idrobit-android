@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">IdroRes</string>
     <string name="idrosat">IdroRes</string>
+    <string name="idrosat_status">Država IdroRes</string>
 </resources>

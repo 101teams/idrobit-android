@@ -413,23 +413,26 @@ fun IrrigationConfigGeneralSettingScreen(
                                     viewModel.irrigationConfigGeneralSatConfig.value?.flowOff = it
                                 }
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            InputWithInitial(
-                                modifier = Modifier,
-                                field = stringResource(id = R.string.flow_off_tolerance),
-                                placeholder = stringResource(id = R.string.flow_off_tolerance),
-                                disabled = false,
-                                keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Text,
-                                    imeAction = ImeAction.Done
-                                ),
-                                modifierParent = Modifier.weight(1f),
-                                trailingUnit = "%",
-                                initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.flowOffTolerance ?: "",
-                                onTextChanged = {
-                                    viewModel.irrigationConfigGeneralSatConfig.value?.flowOffTolerance = it
-                                }
-                            )
+
+                            if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                                Spacer(modifier = Modifier.width(8.dp))
+                                InputWithInitial(
+                                    modifier = Modifier,
+                                    field = stringResource(id = R.string.flow_off_tolerance),
+                                    placeholder = stringResource(id = R.string.flow_off_tolerance),
+                                    disabled = false,
+                                    keyboardOptions = KeyboardOptions.Default.copy(
+                                        keyboardType = KeyboardType.Text,
+                                        imeAction = ImeAction.Done
+                                    ),
+                                    modifierParent = Modifier.weight(1f),
+                                    trailingUnit = "%",
+                                    initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.flowOffTolerance ?: "",
+                                    onTextChanged = {
+                                        viewModel.irrigationConfigGeneralSatConfig.value?.flowOffTolerance = it
+                                    }
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -773,23 +776,25 @@ fun IrrigationConfigGeneralSettingScreen(
 
                         Spacer(modifier = Modifier.height(12.dp))
 
-                        InputWithInitial(
-                            modifier = Modifier,
-                            field = stringResource(id = R.string.temperature),
-                            placeholder = stringResource(id = R.string.temperature),
-                            disabled = false,
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Done
-                            ),
-                            trailingUnit = "sec",
-                            initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.temperature ?: "",
-                            onTextChanged = {
-                                viewModel.irrigationConfigGeneralSatConfig.value?.temperature = it
-                            }
-                        )
+                        if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                            InputWithInitial(
+                                modifier = Modifier,
+                                field = stringResource(id = R.string.temperature),
+                                placeholder = stringResource(id = R.string.temperature),
+                                disabled = false,
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Done
+                                ),
+                                trailingUnit = "sec",
+                                initialValue = viewModel.irrigationConfigGeneralSatConfig.value?.temperature ?: "",
+                                onTextChanged = {
+                                    viewModel.irrigationConfigGeneralSatConfig.value?.temperature = it
+                                }
+                            )
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
 
                         InputWithInitial(
                             modifier = Modifier,

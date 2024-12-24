@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">IrriLife</string>
     <string name="idrosat">IrriLife</string>
+    <string name="idrosat_status">Stato dell\'IrriLife</string>
 </resources>
