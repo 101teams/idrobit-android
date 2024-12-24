@@ -469,45 +469,45 @@ class DeviceViewModel @Inject constructor(
 
         //post sat data
         val satConfigData = mutableMapOf<String, String>()
-        satConfigData["S70"] = satData.plantOperationStatus!!
-        satConfigData["S1000"] = satData.password!!
-        satConfigData["S1002"] = satData.solarIntensity!!
-        satConfigData["S1003"] = satData.windSpeed!!
-        satConfigData["S1005"] = satData.evMaster!!
-        satConfigData["S1006"] = satData.ecCommand!!
-        satConfigData["S1007"] = satData.pulsesFlow!!
-        satConfigData["S1008"] = satData.solarIrradiation!!
-        satConfigData["S1009"] = satData.windSensor!!
-        satConfigData["S1010"] = satData.temperature!!
-        satConfigData["S1011"] = satData.humidity!!
-        satConfigData["S1012"] = satData.maxActiveProgram!!
-        satConfigData["S1013"] = satData.entry1!!
-        satConfigData["S1014"] = satData.entry2!!
-        satConfigData["S1017"] = satData.entry1forDelay!!
-        satConfigData["S1018"] = satData.entry2forDelay!!
-        satConfigData["S1019"] = satData.flowOffTolerance!!
-        satConfigData["S1020"] = satData.flowOff!!
-        satConfigData["S1021"] = satData.flowAlarmDelay!!
-        satConfigData["S1032"] = satData.entry3!!
-        satConfigData["S1033"] = satData.entry4!!
-        satConfigData["S1036"] = satData.entry3forDelay!!
-        satConfigData["S1037"] = satData.entry4forDelay!!
-        satConfigData["S1045"] = satData.pressureMin!!
-        satConfigData["S1046"] = satData.pressureMax!!
-        satConfigData["S1047"] = satData.delayAlarmTimeLowPressure!!
-        satConfigData["S1048"] = satData.delayAlarmTimeHighPressure!!
+        satConfigData["S70"] = satData.plantOperationStatus ?: ""
+        satConfigData["S1000"] = satData.password ?: ""
+        satConfigData["S1002"] = satData.solarIntensity ?: ""
+        satConfigData["S1003"] = satData.windSpeed ?: ""
+        satConfigData["S1005"] = satData.evMaster ?: ""
+        satConfigData["S1006"] = satData.ecCommand ?: ""
+        satConfigData["S1007"] = satData.pulsesFlow ?: ""
+        satConfigData["S1008"] = satData.solarIrradiation ?: ""
+        satConfigData["S1009"] = satData.windSensor ?: ""
+        satConfigData["S1010"] = satData.temperature ?: ""
+        satConfigData["S1011"] = satData.humidity ?: ""
+        satConfigData["S1012"] = satData.maxActiveProgram ?: ""
+        satConfigData["S1013"] = satData.entry1 ?: ""
+        satConfigData["S1014"] = satData.entry2 ?: ""
+        satConfigData["S1017"] = satData.entry1forDelay ?: ""
+        satConfigData["S1018"] = satData.entry2forDelay ?: ""
+        satConfigData["S1019"] = satData.flowOffTolerance ?: ""
+        satConfigData["S1020"] = satData.flowOff ?: ""
+        satConfigData["S1021"] = satData.flowAlarmDelay ?: ""
+        satConfigData["S1032"] = satData.entry3 ?: ""
+        satConfigData["S1033"] = satData.entry4 ?: ""
+        satConfigData["S1036"] = satData.entry3forDelay ?: ""
+        satConfigData["S1037"] = satData.entry4forDelay ?: ""
+        satConfigData["S1045"] = satData.pressureMin ?: ""
+        satConfigData["S1046"] = satData.pressureMax ?: ""
+        satConfigData["S1047"] = satData.delayAlarmTimeLowPressure ?: ""
+        satConfigData["S1048"] = satData.delayAlarmTimeHighPressure ?: ""
 
         val resultSatConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATCONFIG", satConfigData)
 
         //post pump data
         val pumpConfigData = mutableMapOf<String, String>()
-        pumpConfigData["S1516"] = pumpData.pulses!!
-        pumpConfigData["S1524"] = pumpData.pumpDeactivationDelay!!
+        pumpConfigData["S1516"] = pumpData.pulses ?: ""
+        pumpConfigData["S1524"] = pumpData.pumpDeactivationDelay ?: ""
         val resultPumpConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "PUMPCONFIG", pumpConfigData)
 
         //post mv data
         val mvConfigData = mutableMapOf<String, String>()
-        mvConfigData["S1616"] = mvData.delayBetweenMSandEV!!
+        mvConfigData["S1616"] = mvData.delayBetweenMSandEV ?: ""
         val resultMVConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "MVCONFIG", mvConfigData)
 
         if (!resultSatConfig.first) {
@@ -528,7 +528,7 @@ class DeviceViewModel @Inject constructor(
 
         //post sat data
         val satConfigData = mutableMapOf<String, String>()
-        satConfigData["S70"] = satData.plantOperationStatus!!
+        satConfigData["S70"] = satData.plantOperationStatus ?: ""
 
         val resultSatConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATCONFIG", satConfigData)
 
@@ -589,13 +589,13 @@ class DeviceViewModel @Inject constructor(
     ): String? {
         //post mv data
         val data = mutableMapOf<String, String>()
-        data["I1000"] = postData.openedCircuit!!
-        data["I1001"] = postData.acknowledgePulseTime!!
-        data["I1002"] = postData.minimumAmpere!!
-        data["I1003"] = postData.activationDelayMaster!!
-        data["I1004"] = postData.activationDelayEV!!
-        data["I1005"] = postData.evHoldingVoltage!!
-        data["I1006"] = postData.triggerPulseTime!!
+        data["I1000"] = postData.openedCircuit ?: ""
+        data["I1001"] = postData.acknowledgePulseTime ?: ""
+        data["I1002"] = postData.minimumAmpere ?: ""
+        data["I1003"] = postData.activationDelayMaster ?: ""
+        data["I1004"] = postData.activationDelayEV ?: ""
+        data["I1005"] = postData.evHoldingVoltage ?: ""
+        data["I1006"] = postData.triggerPulseTime ?: ""
         val resultMVConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "ICODCONFIG", data)
 
         return if (resultMVConfig.first) null else resultMVConfig.second
@@ -860,22 +860,22 @@ class DeviceViewModel @Inject constructor(
         }
 
         val data = mutableMapOf<String, String>()
-        data[programNameCode] = postData.programName!!
-        data[timeModeCode] = postData.timeMode!!
-        data[startModeCode] = postData.startMode!!
-        data[cycleTimeModeCode] = postData.cycletime!!
-        data[programModeCode] = postData.programMode!!
-        data[flowModeCode] = postData.flowMode!!
-        data[delayBetweenStationCode] = postData.delayBetweenStation!!
-        data[delaybetweenCycleCode] = postData.delayBetweenCycle!!
-        data[minifertProgramCode] = postData.minifertProgramRelated!!
-        data[calendarBMCode] = if(postData.startMode == "0") postData.biweeklyCalendar!! else postData.skippedDays!!
-        data[remainingDaysCode] = postData.daysBeforeStart!!
+        data[programNameCode] = postData.programName ?: ""
+        data[timeModeCode] = postData.timeMode ?: ""
+        data[startModeCode] = postData.startMode ?: ""
+        data[cycleTimeModeCode] = postData.cycletime ?: ""
+        data[programModeCode] = postData.programMode ?: ""
+        data[flowModeCode] = postData.flowMode ?: ""
+        data[delayBetweenStationCode] = postData.delayBetweenStation ?: ""
+        data[delaybetweenCycleCode] = postData.delayBetweenCycle ?: ""
+        data[minifertProgramCode] = postData.minifertProgramRelated ?: ""
+        data[calendarBMCode] = if(postData.startMode == "0") postData.biweeklyCalendar ?: "" else postData.skippedDays ?: ""
+        data[remainingDaysCode] = postData.daysBeforeStart ?: ""
 
         val resultSatPRGConfig = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATPRGCONFIG$programNum", data)
 
         val data2 = mutableMapOf<String, String>()
-        data2[activeWeekCode] = postData.activeWeek!!
+        data2[activeWeekCode] = postData.activeWeek ?: ""
         val resultSatStat = deviceService.postIrrigationConfigNominalFlow(deviceCode, "SATSTAT", data2)
 
         return if (resultSatPRGConfig.first) null else resultSatPRGConfig.second
@@ -954,7 +954,7 @@ class DeviceViewModel @Inject constructor(
             if (isEndTime) {
                 data["S${baseReg + idx + 1}"] = "${i.endHour}.${i.endMinute}"
             } else {
-                data["S${baseReg + idx + 1}"] = i.cycle!!
+                data["S${baseReg + idx + 1}"] = i.cycle ?: ""
             }
             idx += 2
         }
@@ -1106,15 +1106,15 @@ class DeviceViewModel @Inject constructor(
         if (postData.humiditySensorType != null) {
             data[humiditySensorTypeCode] = postData.humiditySensorType!!
         }
-        data[waterBudgetCode] = if(postData.waterBudgetAuto) "255" else postData.waterBudget!!
-        data[programStopCode] = postData.programStop!!
-        data[programStandByCode] = postData.programStandBy!!
-        data[programStartCode] = postData.programStart!!
-        data[programSkipCode] = postData.programSkip!!
-        data[lowTempCode] = postData.lowTemp!!
-        data[highTempCode] = postData.highTemp!!
-        data[lowHumidityCode] = postData.lowHumidity!!
-        data[highHumidityCode] = postData.highHumidity!!
+        data[waterBudgetCode] = if(postData.waterBudgetAuto) "255" else (postData.waterBudget ?: "")
+        data[programStopCode] = postData.programStop ?: ""
+        data[programStandByCode] = postData.programStandBy ?: ""
+        data[programStartCode] = postData.programStart ?: ""
+        data[programSkipCode] = postData.programSkip ?: ""
+        data[lowTempCode] = postData.lowTemp ?: ""
+        data[highTempCode] = postData.highTemp ?: ""
+        data[lowHumidityCode] = postData.lowHumidity ?: ""
+        data[highHumidityCode] = postData.highHumidity ?: ""
         if (postData.humiditySensorLevel != null) {
             data[humiditySensorLevelCode] = postData.humiditySensorLevel!!
         }
@@ -1656,12 +1656,12 @@ class DeviceViewModel @Inject constructor(
         val setpointPhCode = "F1${programNum - 1}002"
         val dosagePhCode = "F1${programNum - 1}001"
 
-        postData[hysteresisCode] = data.hysteresis!!
-        postData[checkEveryCode] = data.checkEvery!!
-        postData[checkEveryTypeCode] = data.checkEveryType!!
-        postData[setpointECCode] = data.setpointEC!!
-        postData[setpointPhCode] = data.setpointPh!!
-        postData[dosagePhCode] = data.dosagePh!!
+        postData[hysteresisCode] = data.hysteresis ?: ""
+        postData[checkEveryCode] = data.checkEvery ?: ""
+        postData[checkEveryTypeCode] = data.checkEveryType ?: ""
+        postData[setpointECCode] = data.setpointEC ?: ""
+        postData[setpointPhCode] = data.setpointPh ?: ""
+        postData[dosagePhCode] = data.dosagePh ?: ""
 
         val result = deviceService.postIrrigationConfigNominalFlow(deviceCode, "FERTPRGCONFIG${programNum}", postData)
         return if (result.first) null else result.second

@@ -567,33 +567,35 @@ fun IrrigationSettingSensorManagementScreen(
 
                             Spacer(modifier = Modifier.height(24.dp))
 
-                            VerticalMultipleCheckWithTitle(
-                                field = stringResource(id = R.string.program_standby),
-                                items = mutableListOf(
-                                    Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(0) == '1'),
-                                    Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(1) == '1'),
-                                    Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(2) == '1'),
-                                    Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(3) == '1'),
-                                    Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(4) == '1'),
-                                    Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(5) == '1'),
-                                    Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(6) == '1'),
-                                    Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(7) == '1'),
-                                    Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(8) == '1'),
-                                    Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(9) == '1'),
-                                    Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(10) == '1'),
-                                    Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(11) == '1'),
-                                ),
-                                modifier = Modifier.fillMaxWidth(),
-                                onChecked = {index, data ->
-                                    val charArray = viewModel.irrigationSettingSensorManagement.value?.programStandBy?.toCharArray()
-                                    charArray!![index] = if(data.second) '1' else '0'
-                                    viewModel.irrigationSettingSensorManagement.value?.programStandBy = String(charArray)
-                                },
-                                disableAll = false,
-                                columnCount = 2,
-                            )
+                            if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                                VerticalMultipleCheckWithTitle(
+                                    field = stringResource(id = R.string.program_standby),
+                                    items = mutableListOf(
+                                        Pair(stringResource(id = R.string.low_temperature), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(0) == '1'),
+                                        Pair(stringResource(id = R.string.low_humidity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(1) == '1'),
+                                        Pair(stringResource(id = R.string.wind), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(2) == '1'),
+                                        Pair(stringResource(id = R.string.solar_intensity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(3) == '1'),
+                                        Pair(stringResource(id = R.string.first_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(4) == '1'),
+                                        Pair(stringResource(id = R.string.second_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(5) == '1'),
+                                        Pair(stringResource(id = R.string.high_temperature), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(6) == '1'),
+                                        Pair(stringResource(id = R.string.high_humidity), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(7) == '1'),
+                                        Pair(stringResource(id = R.string.third_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(8) == '1'),
+                                        Pair(stringResource(id = R.string.fourth_entry), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(9) == '1'),
+                                        Pair(stringResource(id = R.string.low_pressure), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(10) == '1'),
+                                        Pair(stringResource(id = R.string.high_pressure), viewModel.irrigationSettingSensorManagement.value?.programStandBy?.get(11) == '1'),
+                                    ),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onChecked = {index, data ->
+                                        val charArray = viewModel.irrigationSettingSensorManagement.value?.programStandBy?.toCharArray()
+                                        charArray!![index] = if(data.second) '1' else '0'
+                                        viewModel.irrigationSettingSensorManagement.value?.programStandBy = String(charArray)
+                                    },
+                                    disableAll = false,
+                                    columnCount = 2,
+                                )
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                                Spacer(modifier = Modifier.height(24.dp))
+                            }
 
                             if (BuildConfig.FLAVOR == "idroPro" || BuildConfig.FLAVOR == "idroLife") {
                                 VerticalMultipleCheckWithTitle(

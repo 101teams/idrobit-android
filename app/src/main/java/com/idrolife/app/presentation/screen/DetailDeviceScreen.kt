@@ -104,7 +104,7 @@ fun DetailDeviceScreen(
     ) {
         NavigationBanner1(
             navController,
-            "Idrosat",
+            stringResource(id = R.string.idrosat),
             deviceName,
             R.drawable.img_header_detail1,
         )

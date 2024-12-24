@@ -35,6 +35,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.component.NavigationBanner3
@@ -113,14 +114,18 @@ fun IrrigationConfigScreen(
                 .padding(horizontal = 24.dp)
         ) {
             item {
-                IrrigationConfigButton(title = context.getString(R.string.nominal_flow)) {
-                    navController.navigate(Screen.IrrigationConfigNominalFlow.withArgs(deviceID))
+                if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                    IrrigationConfigButton(title = context.getString(R.string.nominal_flow)) {
+                        navController.navigate(Screen.IrrigationConfigNominalFlow.withArgs(deviceID))
+                    }
                 }
                 IrrigationConfigButton(title = context.getString(R.string.general_setting)) {
                     navController.navigate(Screen.IrrigationConfigGeneralSetting.withArgs(deviceID))
                 }
-                IrrigationConfigButton(title = context.getString(R.string.advanced_configuration)) {
-                    navController.navigate(Screen.IrrigationConfigAdvanceConfig.withArgs(deviceID))
+                if (BuildConfig.FLAVOR == "idroLife" || BuildConfig.FLAVOR == "idroPro") {
+                    IrrigationConfigButton(title = context.getString(R.string.advanced_configuration)) {
+                        navController.navigate(Screen.IrrigationConfigAdvanceConfig.withArgs(deviceID))
+                    }
                 }
                 IrrigationConfigButton(title = context.getString(R.string.ev_radio_status)) {
                     navController.navigate(Screen.IrrigationConfigEVRadioStatus.withArgs(deviceID))
