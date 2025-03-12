@@ -45,19 +45,19 @@ android {
     productFlavors {
         create("idroLife") {
             dimension = "version"
-            applicationId = "com.idrolife.portali"
+            applicationId = "com.idrosat.portale"
         }
         create("idroPro") {
             dimension = "version"
-            applicationId = "com.idropro.portali"
+            applicationId = "com.portale.idropro"
         }
         create("idroRes") {
             dimension = "version"
-            applicationId = "com.idrores.portali"
+            applicationId = "com.idrres.portale"
         }
         create("irriLife") {
             dimension = "version"
-            applicationId = "com.irrilife.portali"
+            applicationId = "com.portale.irrilife"
         }
     }
 
