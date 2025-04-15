@@ -68,9 +68,9 @@ import com.idrolife.app.theme.Gray
 import com.idrolife.app.theme.GrayLight
 import com.idrolife.app.theme.GrayVeryLight
 import com.idrolife.app.theme.GrayVeryVeryLight
+import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.Primary
 import com.idrolife.app.theme.Primary2
-import com.idrolife.app.theme.Manrope
 import com.idrolife.app.theme.White
 import com.idrolife.app.utils.Helper
 import kotlinx.coroutines.launch
@@ -150,7 +150,7 @@ fun IrrigationConfigNominalFlowScreen(
 
                 if (item.evSerial != "FFFFFF") {
                     try {
-                        if (item.nominalValue.toInt() >= 6000) {
+                        if (item.nominalValue.toInt() >= 60000) {
                             item.auto = true
                         }
                     } catch (e: Exception) {}
@@ -159,7 +159,7 @@ fun IrrigationConfigNominalFlowScreen(
                         onAuto = {
                             viewModel.irrigationConfigNominalFlow.value[index].auto = it
                             if (it) {
-                                viewModel.irrigationConfigNominalFlow.value[index].nominalValue = "6000"
+                                viewModel.irrigationConfigNominalFlow.value[index].nominalValue = "60000"
                             }
                         },
                         onValueChanged = {
