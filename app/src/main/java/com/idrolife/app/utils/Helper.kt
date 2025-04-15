@@ -3,6 +3,7 @@ package com.idrolife.app.utils
 import android.view.View
 import android.view.Window
 import androidx.core.view.WindowCompat
+import com.idrolife.app.BuildConfig
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -34,5 +35,19 @@ class Helper {
             }
         }
         return null
+    }
+
+    fun getCompanyByFlavor(): String {
+        return when(BuildConfig.FLAVOR) {
+            "idroLife" -> {
+                "idrolife"
+            } "idroPro" -> {
+                "idropro"
+            } "idrores" -> {
+                "idrores"
+            } else -> {
+                "irrilife"
+            }
+        }
     }
 }

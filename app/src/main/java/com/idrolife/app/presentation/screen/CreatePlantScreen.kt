@@ -453,7 +453,7 @@ fun CreatePlantPage1(viewModel: DeviceViewModel, navController: NavController, s
                                 password = password.value,
                                 type = type.value,
                                 coordinate = coordinate.value,
-                                company = "idrolife",
+                                company = Helper().getCompanyByFlavor(),
                             )
 
                             val result = viewModel.postCreatePlant(postData)
@@ -777,7 +777,7 @@ fun CreatePlantPage2(viewModel: DeviceViewModel, navController: NavController, s
                                 password = password.value,
                                 type = type.value,
                                 coordinate = coordinate.value,
-                                company = "idrolife",
+                                company = Helper().getCompanyByFlavor(),
                             )
 
                             val result = viewModel.postCreatePlant(postData)

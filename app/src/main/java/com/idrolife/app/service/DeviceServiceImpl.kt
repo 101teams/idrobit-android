@@ -19,6 +19,7 @@ import com.idrolife.app.data.api.sensor.SensorMeteostatResponse
 import com.idrolife.app.data.api.sensor.SensorSatstatResponse
 import com.idrolife.app.data.api.sensor.SoilMoistureMarkerRequest
 import com.idrolife.app.data.api.sensor.SoilMositureHumidityResponse
+import com.idrolife.app.utils.Helper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
@@ -51,15 +52,7 @@ class DeviceServiceImpl(
 
     override suspend fun getDevices(): Pair<DeviceListResponse?, String> {
         return try {
-            val company = when(BuildConfig.FLAVOR) {
-                "idroLife" -> {
-                    "idrolife"
-                }"idroPro" -> {
-                    "idropro"
-                } else -> {
-                    "idrores"
-                }
-            }
+            val company = Helper().getCompanyByFlavor()
             val response = client.get { url("${HttpRoutes.DEVICE}?company=$company") }.body<DeviceListResponse>()
             Pair(response, "")
         } catch (e: UnauthorizedException) {
@@ -77,15 +70,7 @@ class DeviceServiceImpl(
 
     override suspend fun getDevicesByID(id: String): Pair<DeviceByIDResponse?, String> {
         return try {
-            val company = when(BuildConfig.FLAVOR) {
-                "idroLife" -> {
-                    "idrolife"
-                }"idroPro" -> {
-                    "idropro"
-                } else -> {
-                    "idrores"
-                }
-            }
+            val company = Helper().getCompanyByFlavor()
             val response = client.get { url("${HttpRoutes.DEVICE}/${id}?company=$company") }.body<DeviceByIDResponse>()
             Pair(response, "")
         } catch (e: UnauthorizedException) {
