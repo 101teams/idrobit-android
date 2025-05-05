@@ -69,7 +69,7 @@
     <string name="plant_operation_status">Stato di funzionamento dell\'impianto</string>
     <string name="wind_speed">Velocità del vento</string>
     <string name="ev_master">EV Master</string>
-    <string name="ec_command">Comando EC</string>
+    <string name="ec_command">Comando Pompa</string>
     <string name="pressure">Pressione</string>
     <string name="delay_alarm_time_low_pressure">Ritardo tempo allarme bassa pressione</string>
     <string name="delay_alarm_time_high_pressure">Ritardo tempo allarme alta pressione</string>

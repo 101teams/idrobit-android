@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,9 +84,15 @@ fun ManualEVStartScreen(
 
     val selectedStation = remember { mutableStateOf("") }
 
-    val hour = remember { mutableStateOf("") }
-    val minute = remember { mutableStateOf("") }
-    val second = remember { mutableStateOf("") }
+    val hour = remember { mutableStateOf("00") }
+    val minute = remember { mutableStateOf("00") }
+    val second = remember { mutableStateOf("00") }
+    val aValueIsNotEmpty by remember {
+        derivedStateOf {
+            hour.value.isNotBlank() || minute.value.isNotBlank() || second.value.isNotBlank()
+        }
+    }
+
     val stopStationN = remember { mutableStateOf("") }
     val skipStationN = remember { mutableStateOf("") }
     val stationName = remember { mutableStateOf("") }
@@ -195,6 +202,8 @@ fun ManualEVStartScreen(
                                 val sName = viewModel.evStationName.value.getOrNull(key.toInt() - 1)
 
                                 stationName.value = sName?.second ?: "-"
+
+                                stopStationN.value = key
                             }
                         )
 
@@ -320,11 +329,24 @@ fun ManualEVStartScreen(
                             contentPadding = PaddingValues(0.dp),
                             onClick = {
                                   scope.launch {
+                                      if (!aValueIsNotEmpty) {
+                                          return@launch
+                                      }
+
+                                      if (hour.value.isBlank()) { // set default value
+                                        hour.value = "00"
+                                      }
+
+                                      if (minute.value.isBlank()) { // set default value
+                                        minute.value = "00"
+                                      }
+
+                                      if (second.value.isBlank()) { // set default value
+                                      second.value = "00"
+                                      }
+
                                       if (
                                               selectedStation.value.isNotEmpty() &&
-                                              hour.value.isNotEmpty() &&
-                                              minute.value.isNotEmpty() &&
-                                              second.value.isNotEmpty() &&
                                               hour.value.all { it in '0'..'9' } &&
                                               minute.value.all { it in '0'..'9' } &&
                                               second.value.all { it in '0'..'9' }
@@ -341,10 +363,7 @@ fun ManualEVStartScreen(
                                   }
                             },
                             colors =
-                            if (selectedStation.value.isNotEmpty() &&
-                                hour.value.isNotEmpty() &&
-                                minute.value.isNotEmpty() &&
-                                second.value.isNotEmpty() &&
+                            if (selectedStation.value.isNotEmpty() && aValueIsNotEmpty &&
                                 hour.value.all { it in '0'..'9' } &&
                                 minute.value.all { it in '0'..'9' } &&
                                 second.value.all { it in '0'..'9' })
