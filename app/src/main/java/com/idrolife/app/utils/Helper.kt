@@ -38,16 +38,12 @@ class Helper {
     }
 
     fun getCompanyByFlavor(): String {
-        return when(BuildConfig.FLAVOR) {
-            "idroLife" -> {
-                "idrolife"
-            } "idroPro" -> {
-                "idropro"
-            } "idrores" -> {
-                "idrores"
-            } else -> {
-                "irrilife"
-            }
+        return when (BuildConfig.FLAVOR) {
+            "idroLife" -> "idrolife"
+            "idroPro" -> "idropro"
+            "idroRes" -> "idrores"
+            "irriLife" -> "irrilife"
+            else -> throw IllegalArgumentException("Unknown flavor: ${BuildConfig.FLAVOR}")
         }
     }
 }
