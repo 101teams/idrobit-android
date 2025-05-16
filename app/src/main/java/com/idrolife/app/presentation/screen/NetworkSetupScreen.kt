@@ -58,7 +58,7 @@ fun NetworkSetupScreen(
     ) {
         CustomTopBarSimple(navController, stringResource(id = R.string.choose_network))
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = "SSID: ${viewModel.getSsid()}",

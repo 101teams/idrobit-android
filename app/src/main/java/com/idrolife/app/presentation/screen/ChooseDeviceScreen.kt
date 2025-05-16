@@ -1,5 +1,6 @@
 package com.idrolife.app.presentation.screen
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
@@ -16,9 +17,19 @@ fun ChooseDeviceScreen(navController: NavController) {
 
     BaseChooseWifiScreen(
         screenName = stringResource(id = R.string.choose_device),
-        navController = navController
+        navController = navController,
+        networkNameFilter = ""
     ) {
-//        viewModel.connectToWifi(it.SSID, password)
-        navController.navigate(Screen.ChooseNetwork.route)
+        viewModel.connectToWifi(it.SSID, password) { success ->
+            if (success) {
+                navController.navigate(Screen.ChooseNetwork.route)
+            } else {
+                Toast.makeText(
+                    navController.context,
+                    "Failed to connect to ${it.SSID}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }
