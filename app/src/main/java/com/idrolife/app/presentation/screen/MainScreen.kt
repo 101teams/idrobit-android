@@ -685,24 +685,6 @@ fun Tab2(navController: NavController){
             }
         )
 
-        if (BuildConfig.FLAVOR == "idroRes" || BuildConfig.FLAVOR == "irriLife") {
-            Button(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .height(62.dp)
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                contentPadding = PaddingValues(0.dp),
-                onClick = {
-                    navController.navigate(Screen.ChooseDevice.route)
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = White,),
-                border = BorderStroke(1.dp, Black),
-            ) {
-                Text(stringResource(id = R.string.config_network), fontFamily = Manrope, fontSize = 14.sp, color = Black)
-            }
-        }
-
         Button(
             modifier = Modifier
                 .clip(RoundedCornerShape(4.dp))
