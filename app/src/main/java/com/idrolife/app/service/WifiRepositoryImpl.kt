@@ -28,10 +28,12 @@ class WifiRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val wifiManager: WifiManager,
     private val locationManager: LocationManager,
+    private val connectivityManager: ConnectivityManager
 ) : WifiRepository {
     private val _wifiNetworks = MutableStateFlow<List<ScanResult>>(emptyList())
     private val _isScanning = MutableStateFlow(false)
     private var scanResultsReceiver: BroadcastReceiver? = null
+    private var activeNetworkCallback: ConnectivityManager.NetworkCallback? = null
 
     override fun scanWifiNetworks() {
         _isScanning.value = true
@@ -202,10 +204,20 @@ class WifiRepositoryImpl @Inject constructor(
         }
 
         connectivityManager.requestNetwork(request, callbackImpl)
+        activeNetworkCallback = callbackImpl
     }
 
     // Clean up when repository is no longer needed
     fun cleanup() {
         unregisterReceiver()
+        activeNetworkCallback?.let {
+            try {
+                connectivityManager.unregisterNetworkCallback(it)
+            } catch (e: Exception) {
+                // Network callback not registered, ignore
+            }
+
+            activeNetworkCallback = null
+        }
     }
 }

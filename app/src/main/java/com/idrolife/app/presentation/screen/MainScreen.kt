@@ -685,7 +685,7 @@ fun Tab2(navController: NavController){
             }
         )
 
-        if (BuildConfig.FLAVOR === "idroRes" || BuildConfig.FLAVOR === "irriLife") {
+        if (BuildConfig.FLAVOR == "idroRes" || BuildConfig.FLAVOR == "irriLife") {
             Button(
                 modifier = Modifier
                     .clip(RoundedCornerShape(4.dp))

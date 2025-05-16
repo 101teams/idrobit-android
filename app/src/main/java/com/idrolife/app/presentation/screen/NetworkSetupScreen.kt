@@ -109,10 +109,12 @@ fun NetworkSetupScreen(
         }
 
         if (uiState.isSuccess) {
-            LaunchedEffect(Unit) {
+            LaunchedEffect(uiState.isSuccess) {
+            if(uiState.isSuccess) {
                 navController.navigate(Screen.ChooseDevice.route) {
                     popUpTo(Screen.ChooseDevice.route) { inclusive = true }
                 }
+            }
             }
         }
     }

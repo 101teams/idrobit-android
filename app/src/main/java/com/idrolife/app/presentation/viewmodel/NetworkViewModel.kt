@@ -1,7 +1,6 @@
 package com.idrolife.app.presentation.viewmodel
 
 import android.net.wifi.ScanResult
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idrolife.app.service.WifiRepository
@@ -68,11 +67,7 @@ class NetworkViewModel @Inject constructor(
     fun scanWifiNetworks() {
         if (!_permissionsGranted.value) {
             // Don't try to scan without permissions
-            Toast.makeText(
-                null,
-                "Permissions not granted",
-                Toast.LENGTH_SHORT
-            ).show()
+            _uiState.update { it.copy(connectionResult = false) }
             return
         }
 

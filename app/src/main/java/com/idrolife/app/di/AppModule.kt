@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -157,7 +158,7 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
+    @ActivityRetainedScoped
     fun provideTcpClient(): TcpClient {
         return TcpClient()
     }

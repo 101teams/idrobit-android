@@ -47,6 +47,7 @@ import com.idrolife.app.presentation.component.NotificationBarColorEffect
 import com.idrolife.app.presentation.viewmodel.NetworkViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.Primary2
+import com.idrolife.app.theme.PrimaryPale
 import com.idrolife.app.theme.White
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -54,6 +55,7 @@ import com.idrolife.app.theme.White
 fun BaseChooseWifiScreen(
     screenName: String,
     navController: NavController,
+    connectingToSsid: String? = null,
     networkNameFilter: String = "",
     onNetworkSelected: (ScanResult) -> Unit
 ) {
@@ -102,6 +104,7 @@ fun BaseChooseWifiScreen(
             navController = navController,
             wifiNetworks = wifiNetworks,
             isScanning = isScanning,
+            connectingToSsid = connectingToSsid,
             onNetworkSelected = onNetworkSelected,
             onScanClicked = { viewModel.scanWifiNetworks() }
         )
@@ -204,6 +207,7 @@ fun WifiScreenContent(
     navController: NavController,
     wifiNetworks: List<ScanResult>,
     isScanning: Boolean,
+    connectingToSsid: String?,
     onNetworkSelected: (ScanResult) -> Unit,
     onScanClicked: () -> Unit
 ) {
@@ -249,6 +253,7 @@ fun WifiScreenContent(
             } else {
                 NetworkList(
                     networks = wifiNetworks,
+                    connectingToSsid = connectingToSsid,
                     onNetworkSelected = { network ->
                         onNetworkSelected(network)
                     }
@@ -301,16 +306,16 @@ fun WifiEnableDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun NetworkList(networks: List<ScanResult>, onNetworkSelected: (ScanResult) -> Unit) {
+fun NetworkList(networks: List<ScanResult>, connectingToSsid: String?, onNetworkSelected: (ScanResult) -> Unit) {
     LazyColumn {
         items(networks) { network ->
-            NetworkItem(network, onNetworkSelected)
+            NetworkItem(network, connectingToSsid, onNetworkSelected)
         }
     }
 }
 
 @Composable
-fun NetworkItem(network: ScanResult, onNetworkSelected: (ScanResult) -> Unit) {
+fun NetworkItem(network: ScanResult, connectingToSsid: String?, onNetworkSelected: (ScanResult) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -322,7 +327,11 @@ fun NetworkItem(network: ScanResult, onNetworkSelected: (ScanResult) -> Unit) {
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = Primary2),
             onClick = { onNetworkSelected(network) }) {
-            Text("Connect")
+            if (connectingToSsid == network.SSID) {
+                LoadingIndicator(color = PrimaryPale)
+            } else {
+                Text("Connect")
+            }
         }
     }
 }

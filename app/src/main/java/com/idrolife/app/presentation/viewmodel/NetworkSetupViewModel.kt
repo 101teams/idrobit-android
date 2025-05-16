@@ -26,21 +26,20 @@ data class NetworkSetupUiState(
     val error: String? = null,
     val isSuccess: Boolean = false
 )
-
-@HiltViewModel
 class NetworkSetupViewModel @Inject constructor(
-    @ApplicationContext context: Context,
+    private val prefManager: PrefManager,
     private val tcpClient: TcpClient,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val ssid: String = checkNotNull(savedStateHandle["ssid"])
     private val _uiState = MutableStateFlow(NetworkSetupUiState())
     val uiState = _uiState.asStateFlow()
-    private val prefManager = PrefManager(context)
 
     init {
         tcpClient.initialize { response ->
-            processResponse(response)
+            viewModelScope.launch {
+                processResponse(response)
+            }
         }
     }
 
