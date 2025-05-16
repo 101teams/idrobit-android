@@ -1,82 +1,46 @@
 package com.idrolife.app.service
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
-import java.io.BufferedWriter
 import java.io.InputStreamReader
-import java.io.OutputStreamWriter
 import java.io.PrintWriter
+import java.net.InetSocketAddress
 import java.net.Socket
 import javax.inject.Inject
 
 class TcpClient @Inject constructor() {
-    private var serverMessage: String = ""
-    private var socket: Socket? = null
-    private var isRunning = false
-    private var onResponseReceived: ((String) -> Unit)? = null
+    private val serverIp: String = "192.168.1.1"
+    private val serverPort: Int = 1884
+    private val timeoutMillis: Int = 10_000
 
-    companion object {
-        const val SERVER_IP = "192.168.4.1"
-        const val SERVER_PORT = 23
-        const val TCP_EXCEPTION_ERROR = "TCP_EXCEPTION_ERROR"
+    sealed class Result {
+        data class Success(val response: String) : Result()
+        data class Error(val exception: Exception) : Result()
     }
 
-    fun initialize(callback: (String) -> Unit) {
-        onResponseReceived = callback
-    }
+    suspend fun sendAndReceive(message: String): Result = withContext(Dispatchers.IO) {
+        val socket = Socket()
+        return@withContext try {
+            socket.connect(InetSocketAddress(serverIp, serverPort), timeoutMillis)
+            socket.soTimeout = timeoutMillis
 
-    fun run() {
-        isRunning = true
+            val writer = PrintWriter(socket.getOutputStream(), true)
+            val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
 
-        try {
-            socket = Socket(SERVER_IP, SERVER_PORT)
+            writer.print(message)
+            writer.flush()
 
-            val reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
+            val buffer = CharArray(1024)
+            val charsRead = reader.read(buffer)
+            val response = if (charsRead != -1) String(buffer, 0, charsRead) else ""
 
-            // Launch a coroutine to read from the socket
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    while (isRunning) {
-                        serverMessage = reader.readLine() ?: ""
-                        if (serverMessage.isNotEmpty()) {
-                            withContext(Dispatchers.Main) {
-                                onResponseReceived?.invoke(serverMessage)
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        onResponseReceived?.invoke(TCP_EXCEPTION_ERROR)
-                    }
-                }
-            }
+            Result.Success(response)
 
         } catch (e: Exception) {
-            CoroutineScope(Dispatchers.Main).launch {
-                onResponseReceived?.invoke(TCP_EXCEPTION_ERROR)
-            }
+            Result.Error(e)
+        } finally {
+            socket.close()
         }
-    }
-
-    fun sendMessage(message: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val writer = PrintWriter(BufferedWriter(OutputStreamWriter(socket?.getOutputStream())), true)
-                writer.println(message)
-                writer.flush()
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    onResponseReceived?.invoke(TCP_EXCEPTION_ERROR)
-                }
-            }
-        }
-    }
-
-    fun stopClient() {
-        isRunning = false
-        socket?.close()
     }
 }

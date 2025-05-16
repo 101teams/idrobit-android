@@ -66,7 +66,7 @@ class PrefManager(
 
     private val ServerDataKey = "server_data"
 
-    fun saveServerData(data: String) {
+    fun setServerData(data: String) {
         val editor = sharedPreferences.edit()
         editor.putString(ServerDataKey, data)
         editor.apply()

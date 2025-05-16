@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +49,14 @@ fun NetworkSetupScreen(
     val viewModel: NetworkSetupViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val password = remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            navController.navigate(Screen.ChooseDevice.route) {
+                popUpTo(Screen.ChooseDevice.route) { inclusive = true }
+            }
+        }
+    }
 
     NotificationBarColorEffect()
 
@@ -107,16 +116,6 @@ fun NetworkSetupScreen(
                 onDismiss = { viewModel.clearError() }
             )
         }
-
-        if (uiState.isSuccess) {
-            LaunchedEffect(uiState.isSuccess) {
-            if(uiState.isSuccess) {
-                navController.navigate(Screen.ChooseDevice.route) {
-                    popUpTo(Screen.ChooseDevice.route) { inclusive = true }
-                }
-            }
-            }
-        }
     }
 }
 
@@ -132,12 +131,12 @@ fun ErrorDialog(
         text = { Text(errorMessage) },
         confirmButton = {
             TextButton(onClick = onRetry) {
-                Text("Retry")
+                Text("Retry", color = Primary2)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text("Cancel", color = Color.Gray)
             }
         }
     )
