@@ -78,6 +78,7 @@ import com.idrolife.app.presentation.component.CheckPermission
 import com.idrolife.app.presentation.component.CustomTopBarSimple
 import com.idrolife.app.presentation.component.DialogCancelCreatePlant
 import com.idrolife.app.presentation.component.Input
+import com.idrolife.app.presentation.component.NotificationBarColorEffect
 import com.idrolife.app.presentation.component.PasswordInput
 import com.idrolife.app.presentation.component.TopToastDialog
 import com.idrolife.app.presentation.viewmodel.DeviceViewModel
@@ -100,9 +101,6 @@ fun CreatePlantScreen(
 ) {
     val context = LocalContext.current
 
-    val window = (context as Activity).window
-    val view = LocalView.current
-
     val viewModel = hiltViewModel<DeviceViewModel>()
     val scope = rememberCoroutineScope()
 
@@ -112,18 +110,7 @@ fun CreatePlantScreen(
     val showToast = remember { mutableStateOf(false) }
     val showCancelDialog = remember { mutableStateOf(false) }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                Helper().setNotifBarColor(view, window, BrokenWhite.toArgb(),true)
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
+    NotificationBarColorEffect()
 
     Column(
         modifier = Modifier

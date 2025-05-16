@@ -1,6 +1,9 @@
 package com.idrolife.app.di
 
 import android.content.Context
+import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import com.idrolife.app.data.api.ErrorResponse
 import com.idrolife.app.data.api.UnauthorizedException
 import com.idrolife.app.data.api.UnprocessableEntityException
@@ -8,7 +11,11 @@ import com.idrolife.app.service.AuthService
 import com.idrolife.app.service.AuthServiceImpl
 import com.idrolife.app.service.DeviceService
 import com.idrolife.app.service.DeviceServiceImpl
+import com.idrolife.app.service.TcpClient
+import com.idrolife.app.service.WifiRepository
+import com.idrolife.app.service.WifiRepositoryImpl
 import com.idrolife.app.utils.PrefManager
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -130,4 +137,36 @@ object AppModule {
 
         return DeviceServiceImpl(client)
     }
+
+    @Provides
+    @Singleton
+    fun provideWifiManager(@ApplicationContext context: Context): WifiManager {
+        return context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationManager(@ApplicationContext context: Context): LocationManager {
+        return context.applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager {
+        return context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    @Provides
+    @Singleton
+    fun provideTcpClient(): TcpClient {
+        return TcpClient()
+    }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+    @Binds
+    @Singleton
+    abstract fun bindWifiRepository(impl: WifiRepositoryImpl): WifiRepository
 }

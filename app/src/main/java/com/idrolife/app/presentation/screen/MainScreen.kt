@@ -178,13 +178,15 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .height(
-                        when(BuildConfig.FLAVOR) {
+                        when (BuildConfig.FLAVOR) {
                             "idroLife" -> {
                                 52.dp
                             }
+
                             "idroPro", "idroRes", "irriLife" -> {
                                 36.dp
                             }
+
                             else -> {
                                 52.dp
                             }
@@ -632,10 +634,11 @@ fun Tab2(navController: NavController){
         Box(
             modifier = Modifier
                 .padding(vertical = 24.dp)
-                .background(PrimarySoft,
+                .background(
+                    PrimarySoft,
                     shape = RoundedCornerShape(14.dp)
                 )
-                .size(280.dp),
+                .size(240.dp),
         ){
             Image(
                 painter = painterResource(id = R.drawable.img_account_white),
@@ -681,6 +684,24 @@ fun Tab2(navController: NavController){
                 context.resources.updateConfiguration(config, context.resources.displayMetrics)
             }
         )
+
+        if (BuildConfig.FLAVOR === "idroRes" || BuildConfig.FLAVOR === "irriLife") {
+            Button(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .height(62.dp)
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+                contentPadding = PaddingValues(0.dp),
+                onClick = {
+                    navController.navigate(Screen.ChooseDevice.route)
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = White,),
+                border = BorderStroke(1.dp, Black),
+            ) {
+                Text(stringResource(id = R.string.config_network), fontFamily = Manrope, fontSize = 14.sp, color = Black)
+            }
+        }
 
         Button(
             modifier = Modifier

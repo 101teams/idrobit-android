@@ -63,4 +63,16 @@ class PrefManager(
     fun getRememberMe(): Boolean {
         return sharedPreferences.getBoolean("remember_me", false)
     }
+
+    private val ServerDataKey = "server_data"
+
+    fun saveServerData(data: String) {
+        val editor = sharedPreferences.edit()
+        editor.putString(ServerDataKey, data)
+        editor.apply()
+    }
+
+    fun getServerData(): String? {
+        return sharedPreferences.getString(ServerDataKey, null)
+    }
 }
