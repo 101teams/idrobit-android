@@ -1,5 +1,6 @@
 package com.idrolife.app.service
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -36,11 +37,26 @@ class TcpClient @Inject constructor() {
             val response = if (charsRead != -1) String(buffer, 0, charsRead) else ""
 
             Result.Success(response)
-
+        } catch (e: java.net.ConnectException) {
+            Result.Error(Exception("Failed to connect. Connection refused or timed out."))
         } catch (e: Exception) {
             Result.Error(e)
         } finally {
             socket.close()
+        }
+    }
+
+    suspend fun send(message: String) = withContext(Dispatchers.IO) {
+        try {
+            val socket = Socket()
+            socket.connect(InetSocketAddress(serverIp, serverPort), timeoutMillis)
+            socket.getOutputStream().bufferedWriter().use { writer ->
+                writer.write(message)
+                writer.flush()
+            }
+            socket.close()
+        } catch (e: Exception) {
+            Log.e("helow", "Send-only error", e)
         }
     }
 }

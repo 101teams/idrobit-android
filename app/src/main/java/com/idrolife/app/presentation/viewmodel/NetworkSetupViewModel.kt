@@ -46,7 +46,8 @@ class NetworkSetupViewModel @Inject constructor(
                 is TcpClient.Result.Success -> {
                     val response = result.response
                     if (response.contains("\$SSID=$ssid,$password")) {
-                        handleServerSetup()
+                        tcpClient.send("\$REBOOT\r\n")
+                        _uiState.value = NetworkSetupUiState(isSuccess = true)
                     } else {
                         _uiState.value = NetworkSetupUiState(error = "SSID or password incorrect")
                     }
@@ -55,26 +56,6 @@ class NetworkSetupViewModel @Inject constructor(
                 is TcpClient.Result.Error -> {
                     _uiState.value = NetworkSetupUiState(error = "TCP Error: ${result.exception.message}")
                 }
-            }
-        }
-    }
-
-    private suspend fun handleServerSetup() {
-        when (val serverResp = tcpClient.sendAndReceive("\$SERVER?\r\n")) {
-            is TcpClient.Result.Success -> {
-                val response = serverResp.response
-                if (response.startsWith("\$SERVER=")) {
-                    val serverData = response.removePrefix("\$SERVER=")
-                    prefManager.setServerData(serverData)
-                    tcpClient.sendAndReceive("\$REBOOT\r\n")
-                    _uiState.value = NetworkSetupUiState(isSuccess = true)
-                } else {
-                    _uiState.value = NetworkSetupUiState(error = "Unexpected server response")
-                }
-            }
-
-            is TcpClient.Result.Error -> {
-                _uiState.value = NetworkSetupUiState(error = "Error fetching server info")
             }
         }
     }
