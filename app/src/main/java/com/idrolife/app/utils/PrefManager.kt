@@ -75,4 +75,13 @@ class PrefManager(
     fun getServerData(): String? {
         return sharedPreferences.getString(ServerDataKey, null)
     }
+
+    fun setPreviousWifi(ssid: String?) {
+        saveData("previous_wifi_ssid", ssid ?: "")
+    }
+
+    fun getPreviousWifi(): String? {
+        val ssid = getData("previous_wifi_ssid", "")
+        return if (ssid.isEmpty()) null else ssid
+    }
 }

@@ -10,4 +10,6 @@ interface WifiRepository {
     fun checkLocationEnabled(): Boolean
     fun isWifiEnabled(): Boolean
     fun connectToWifi(ssid: String, password: String?, callback: (success: Boolean) -> Unit)
+    fun getCurrentWifiInfo(): Pair<String?, Int?>
+    fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit)
 }

@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,20 +39,31 @@ import com.idrolife.app.presentation.component.CustomTopBarSimple
 import com.idrolife.app.presentation.component.Input
 import com.idrolife.app.presentation.component.NotificationBarColorEffect
 import com.idrolife.app.presentation.viewmodel.NetworkSetupViewModel
+import com.idrolife.app.presentation.viewmodel.NetworkViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.White
+import com.idrolife.app.utils.PrefManager
 
 @Composable
 fun NetworkSetupScreen(
     navController: NavController,
 ) {
     val viewModel: NetworkSetupViewModel = hiltViewModel()
+    val networkViewModel: NetworkViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val password = remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val prefManager = remember { PrefManager(context) }
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
+            // Restore previous network after setup
+            val prevSsid = prefManager.getPreviousWifi()
+            if (!prevSsid.isNullOrEmpty() && prevSsid != "MOBILE_DATA") {
+                networkViewModel.reconnectToWifi(prevSsid) { }
+            }
+            // If prevSsid is MOBILE_DATA or null, do nothing (Android will use mobile data automatically)
             navController.navigate(Screen.ChooseDevice.route) {
                 popUpTo(Screen.ChooseDevice.route) { inclusive = true }
             }

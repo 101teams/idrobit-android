@@ -96,8 +96,6 @@ class NetworkViewModel @Inject constructor(
         _uiState.update { it.copy(showWifiEnableDialog = false) }
     }
 
-
-
     fun connectToWifi(ssid: String, password: String?, callback: (success: Boolean) -> Unit) {
         wifiRepository.connectToWifi(ssid, password) { success ->
             viewModelScope.launch {
@@ -112,6 +110,14 @@ class NetworkViewModel @Inject constructor(
                 callback(success)
             }
         }
+    }
+
+    fun getCurrentWifiInfo(): Pair<String?, Int?> {
+        return wifiRepository.getCurrentWifiInfo()
+    }
+
+    fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit) {
+        wifiRepository.reconnectToWifi(ssid, callback)
     }
 
     override fun onCleared() {

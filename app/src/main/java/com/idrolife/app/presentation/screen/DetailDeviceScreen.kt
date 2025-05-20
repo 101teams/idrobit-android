@@ -266,21 +266,19 @@ fun DetailDeviceScreen(
                         }
                     }
 
-                    if (BuildConfig.FLAVOR == "idroRes" || BuildConfig.FLAVOR == "irriLife") {
-                        Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                        Button2Image(
-                            Primary2,
-                            null,
-                            stringResource(id = R.string.config_network),
-                            R.drawable.ic_arrow_up_white,
-                            onClick = {
-                                navController.navigate(Screen.ChooseDevice.route)
-                            },
-                            null,
-                            null,
-                        )
-                    }
+                    Button2Image(
+                        Primary2,
+                        null,
+                        stringResource(id = R.string.config_network),
+                        R.drawable.ic_arrow_up_white,
+                        onClick = {
+                            navController.navigate(Screen.ChooseDevice.route)
+                        },
+                        null,
+                        null,
+                    )
                 }
             }
         }

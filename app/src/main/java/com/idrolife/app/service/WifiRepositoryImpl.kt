@@ -207,6 +207,25 @@ class WifiRepositoryImpl @Inject constructor(
         activeNetworkCallback = callbackImpl
     }
 
+    override fun getCurrentWifiInfo(): Pair<String?, Int?> {
+        val info = wifiManager.connectionInfo
+        val ssid = info?.ssid?.replace("\"", "")
+        val networkId = info?.networkId
+        return Pair(ssid, networkId)
+    }
+
+    override fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit) {
+        val configuredNetworks = wifiManager.configuredNetworks
+        val target = configuredNetworks?.find { it.SSID.replace("\"", "") == ssid }
+        if (target != null) {
+            val enabled = wifiManager.enableNetwork(target.networkId, true)
+            wifiManager.reconnect()
+            callback(enabled)
+        } else {
+            callback(false)
+        }
+    }
+
     // Clean up when repository is no longer needed
     fun cleanup() {
         unregisterReceiver()

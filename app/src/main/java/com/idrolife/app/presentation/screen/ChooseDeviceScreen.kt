@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -13,12 +14,15 @@ import com.idrolife.app.BuildConfig
 import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.viewmodel.NetworkViewModel
+import com.idrolife.app.utils.PrefManager
 
 @Composable
 fun ChooseDeviceScreen(navController: NavController) {
     val viewModel = hiltViewModel<NetworkViewModel>()
     val password = remember { "12345678" }
     var connectingToSsid by remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+    val prefManager = remember { PrefManager(context) }
 
     BaseChooseWifiScreen(
         screenName = stringResource(id = R.string.choose_device),
@@ -26,6 +30,9 @@ fun ChooseDeviceScreen(navController: NavController) {
         connectingToSsid = connectingToSsid,
         networkNameFilter = if (BuildConfig.DEBUG) "" else "IL_"
     ) {
+        // Save current WiFi before connecting to IoT device
+        val (currentSsid, _) = viewModel.getCurrentWifiInfo()
+        prefManager.setPreviousWifi(currentSsid)
         connectingToSsid = it.SSID
         viewModel.connectToWifi(it.SSID, password) { success ->
             if (success) {
@@ -37,7 +44,6 @@ fun ChooseDeviceScreen(navController: NavController) {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
             connectingToSsid = null
         }
     }
