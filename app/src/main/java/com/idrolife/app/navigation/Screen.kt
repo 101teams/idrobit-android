@@ -31,6 +31,9 @@ sealed class Screen(val route: String) {
     object FertigationProgrammationECSetting: Screen("fertigation-programmation-ec-setting")
     object FertigationStatus: Screen("fertigation-status")
     object Map: Screen("map")
+    object ChooseDevice : Screen("choose_device")
+    object ChooseNetwork : Screen("choose_network")
+    object NetworkSetup : Screen("network_setup/{ssid}")
 
     fun withArgs(vararg args: String): String {
         return buildString {

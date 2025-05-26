@@ -249,4 +249,8 @@
     <string name="here">Here</string>
     <string name="success_reset_password">Password reset email successfully sent</string>
     <string name="failed_reset_password">Password not resetting</string>
+    <string name="config_network">Configure Network</string>
+    <string name="choose_network">Choose Network</string>
+    <string name="choose_device">Choose Device</string>
+    <string name="connect">Connect</string>
 </resources>

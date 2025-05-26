@@ -178,13 +178,15 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .height(
-                        when(BuildConfig.FLAVOR) {
+                        when (BuildConfig.FLAVOR) {
                             "idroLife" -> {
                                 52.dp
                             }
+
                             "idroPro", "idroRes", "irriLife" -> {
                                 36.dp
                             }
+
                             else -> {
                                 52.dp
                             }
@@ -632,10 +634,11 @@ fun Tab2(navController: NavController){
         Box(
             modifier = Modifier
                 .padding(vertical = 24.dp)
-                .background(PrimarySoft,
+                .background(
+                    PrimarySoft,
                     shape = RoundedCornerShape(14.dp)
                 )
-                .size(280.dp),
+                .size(240.dp),
         ){
             Image(
                 painter = painterResource(id = R.drawable.img_account_white),

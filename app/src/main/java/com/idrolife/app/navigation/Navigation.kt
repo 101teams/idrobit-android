@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.idrolife.app.presentation.screen.ChooseDeviceScreen
+import com.idrolife.app.presentation.screen.ChooseNetworkScreen
 import com.idrolife.app.presentation.screen.CreatePlantScreen
 import com.idrolife.app.presentation.screen.DetailDeviceScreen
 import com.idrolife.app.presentation.screen.FertigationDeviceScreen
@@ -37,6 +39,7 @@ import com.idrolife.app.presentation.screen.MainScreen
 import com.idrolife.app.presentation.screen.ManualEVStartScreen
 import com.idrolife.app.presentation.screen.ManualProgramStartScreen
 import com.idrolife.app.presentation.screen.MapScreen
+import com.idrolife.app.presentation.screen.NetworkSetupScreen
 import com.idrolife.app.presentation.screen.RegisterScreen
 import com.idrolife.app.presentation.screen.SensorDeviceScreen
 import com.idrolife.app.presentation.screen.SensorSoilMoistureScreen
@@ -657,6 +660,42 @@ fun Navigation() {
             val deviceID = it.arguments?.getString("deviceID") ?: ""
             val deviceCode = it.arguments?.getString("deviceCode") ?: ""
             MapScreen(navController, deviceID, deviceCode)
+        }
+
+        composable(
+            route = Screen.ChooseDevice.route,
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            ChooseDeviceScreen(navController)
+        }
+
+        composable(
+            route = Screen.ChooseNetwork.route,
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            ChooseNetworkScreen(navController)
+        }
+
+        composable(
+            route = Screen.NetworkSetup.route + "/{ssid}",
+            arguments = listOf(
+                navArgument("ssid") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+            ),
+            exitTransition = exitTransition,
+            popExitTransition = popExitTransition,
+            enterTransition = enterTransition,
+            popEnterTransition = popEnterTransition
+        ) {
+            NetworkSetupScreen(navController)
         }
     }
 }
