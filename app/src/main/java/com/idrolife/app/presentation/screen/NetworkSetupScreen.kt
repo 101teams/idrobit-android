@@ -1,5 +1,6 @@
 package com.idrolife.app.presentation.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,23 +52,17 @@ fun NetworkSetupScreen(
     navController: NavController,
 ) {
     val viewModel: NetworkSetupViewModel = hiltViewModel()
-    val networkViewModel: NetworkViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val password = remember { mutableStateOf("") }
-    val context = LocalContext.current
-    val prefManager = remember { PrefManager(context) }
+    val isReconnectError by remember {
+        derivedStateOf {
+            uiState.error?.contains("Failed to reconnect") ?: false
+        }
+    }
 
     LaunchedEffect(uiState.isSuccess) {
         if (uiState.isSuccess) {
-            // Restore previous network after setup
-            val prevSsid = prefManager.getPreviousWifi()
-            if (!prevSsid.isNullOrEmpty() && prevSsid != "MOBILE_DATA") {
-                networkViewModel.reconnectToWifi(prevSsid) { }
-            }
-            // If prevSsid is MOBILE_DATA or null, do nothing (Android will use mobile data automatically)
-            navController.navigate(Screen.ChooseDevice.route) {
-                popUpTo(Screen.ChooseDevice.route) { inclusive = true }
-            }
+            viewModel.restorePreviousNetwork(navController)
         }
     }
 
@@ -112,19 +108,38 @@ fun NetworkSetupScreen(
             Text(stringResource(id = R.string.connect), style = MaterialTheme.typography.button, fontSize = 18.sp)
         }
 
-        if (uiState.isLoading) {
+        if (uiState.isLoading || uiState.isRestoring) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = Primary2)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(color = Primary2)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = if (uiState.isRestoring) "Restoring network connection..." else "Configuring device...",
+                        style = MaterialTheme.typography.body2,
+                        color = Black
+                    )
+                }
             }
         }
 
         if (uiState.error != null) {
             ErrorDialog(
+                confirmText = if (isReconnectError) "OK" else "Retry",
                 errorMessage = uiState.error ?: "",
-                onRetry = { viewModel.configureNetwork(password.value) },
+                onConfirm = {
+                    if (isReconnectError) {
+                        navController.navigate(Screen.Main.route) {
+                            popUpTo(Screen.Main.route) { inclusive = true }
+                        }
+                    } else {
+                        viewModel.configureNetwork(password.value)
+                    }
+                },
                 onDismiss = { viewModel.clearError() }
             )
         }
@@ -134,7 +149,8 @@ fun NetworkSetupScreen(
 @Composable
 fun ErrorDialog(
     errorMessage: String,
-    onRetry: () -> Unit,
+    confirmText: String? = null,
+    onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
@@ -142,8 +158,8 @@ fun ErrorDialog(
         title = { Text("Error") },
         text = { Text(errorMessage) },
         confirmButton = {
-            TextButton(onClick = onRetry) {
-                Text("Retry", color = Primary2)
+            TextButton(onClick = onConfirm) {
+                Text(confirmText ?: "Retry", color = Primary2)
             }
         },
         dismissButton = {

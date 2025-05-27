@@ -32,7 +32,9 @@ fun ChooseDeviceScreen(navController: NavController) {
     ) {
         // Save current WiFi before connecting to IoT device
         val (currentSsid, _) = viewModel.getCurrentWifiInfo()
-        prefManager.setPreviousWifi(currentSsid)
+        // Handle cases where currentSsid might be null or contain quotes
+        val cleanSsid = currentSsid?.replace("\"", "")?.takeIf { it.isNotEmpty() } ?: "MOBILE_DATA"
+        prefManager.setPreviousWifi(cleanSsid)
         connectingToSsid = it.SSID
         viewModel.connectToWifi(it.SSID, password) { success ->
             if (success) {

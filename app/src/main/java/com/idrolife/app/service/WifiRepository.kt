@@ -12,4 +12,6 @@ interface WifiRepository {
     fun connectToWifi(ssid: String, password: String?, callback: (success: Boolean) -> Unit)
     fun getCurrentWifiInfo(): Pair<String?, Int?>
     fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit)
+    fun isInternetAvailable(): Boolean
+    fun waitForInternetConnectivity(timeoutMs: Long = 10000, callback: (Boolean) -> Unit)
 }

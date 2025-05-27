@@ -120,6 +120,14 @@ class NetworkViewModel @Inject constructor(
         wifiRepository.reconnectToWifi(ssid, callback)
     }
 
+    fun isInternetAvailable(): Boolean {
+        return wifiRepository.isInternetAvailable()
+    }
+
+    fun waitForInternetConnectivity(timeoutMs: Long = 10000, callback: (Boolean) -> Unit) {
+        wifiRepository.waitForInternetConnectivity(timeoutMs, callback)
+    }
+
     override fun onCleared() {
         super.onCleared()
         // Clean up if your WifiRepositoryImpl has a cleanup method

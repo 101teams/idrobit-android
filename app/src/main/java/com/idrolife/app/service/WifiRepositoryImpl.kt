@@ -169,6 +169,16 @@ class WifiRepositoryImpl @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun connectWithNetworkSpecifier(ssid: String, password: String?, callback: (Boolean) -> Unit) {
+        // Clean up any existing network callback first
+        activeNetworkCallback?.let {
+            try {
+                connectivityManager.unregisterNetworkCallback(it)
+                connectivityManager.bindProcessToNetwork(null) // Clear existing binding
+            } catch (e: Exception) {
+                Log.d("WifiRepository", "Error clearing existing network callback: ${e.message}")
+            }
+        }
+        
         val specifierBuilder = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
 
@@ -180,6 +190,7 @@ class WifiRepositoryImpl @Inject constructor(
 
         val request = NetworkRequest.Builder()
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .setNetworkSpecifier(specifier)
             .build()
 
@@ -215,15 +226,126 @@ class WifiRepositoryImpl @Inject constructor(
     }
 
     override fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit) {
+        Log.d("WifiRepository", "Attempting to reconnect to WiFi: $ssid")
+        
+        // Clean up any existing network binding first
+        activeNetworkCallback?.let {
+            try {
+                connectivityManager.unregisterNetworkCallback(it)
+                connectivityManager.bindProcessToNetwork(null) // Clear existing binding
+                Log.d("WifiRepository", "Cleared existing network binding")
+            } catch (e: Exception) {
+                Log.d("WifiRepository", "Error clearing network binding: ${e.message}")
+            }
+            activeNetworkCallback = null
+        }
+        
         val configuredNetworks = wifiManager.configuredNetworks
         val target = configuredNetworks?.find { it.SSID.replace("\"", "") == ssid }
+        
         if (target != null) {
+            Log.d("WifiRepository", "Found configured network for $ssid, networkId: ${target.networkId}")
             val enabled = wifiManager.enableNetwork(target.networkId, true)
-            wifiManager.reconnect()
-            callback(enabled)
+            val reconnected = wifiManager.reconnect()
+            Log.d("WifiRepository", "Network enabled: $enabled, reconnect called: $reconnected")
+            
+            // Wait a bit for connection to establish before calling back
+            Handler(Looper.getMainLooper()).postDelayed({
+                val currentWifi = getCurrentWifiInfo().first
+                Log.d("WifiRepository", "After reconnection, current WiFi: $currentWifi")
+                callback(enabled && reconnected)
+            }, 1500) // 1.5 second delay
         } else {
+            Log.w("WifiRepository", "No configured network found for SSID: $ssid")
             callback(false)
         }
+    }
+
+    override fun isInternetAvailable(): Boolean {
+        return try {
+            val activeNetwork = connectivityManager.activeNetwork
+            Log.d("WifiRepository", "Active network: $activeNetwork")
+            
+            if (activeNetwork == null) {
+                Log.d("WifiRepository", "No active network found")
+                return false
+            }
+            
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+            if (networkCapabilities == null) {
+                Log.d("WifiRepository", "No network capabilities found")
+                return false
+            }
+            
+            val hasInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            val isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            
+            Log.d("WifiRepository", "Network capabilities - Internet: $hasInternet, Validated: $isValidated")
+            
+            hasInternet && isValidated
+        } catch (e: Exception) {
+            Log.e("WifiRepository", "Error checking internet availability: ${e.message}")
+            false
+        }
+    }
+
+    override fun waitForInternetConnectivity(timeoutMs: Long, callback: (Boolean) -> Unit) {
+        Log.d("WifiRepository", "Waiting for internet connectivity with timeout: ${timeoutMs}ms")
+        
+        if (isInternetAvailable()) {
+            Log.d("WifiRepository", "Internet already available")
+            callback(true)
+            return
+        }
+        
+        var callbackInvoked = false
+        
+        val networkCallback = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                super.onCapabilitiesChanged(network, networkCapabilities)
+                val hasInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                val isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                
+                Log.d("WifiRepository", "Network capabilities changed - Internet: $hasInternet, Validated: $isValidated")
+                
+                if (hasInternet && isValidated && !callbackInvoked) {
+                    callbackInvoked = true
+                    Log.d("WifiRepository", "Internet connectivity established")
+                    try {
+                        connectivityManager.unregisterNetworkCallback(this)
+                    } catch (e: Exception) {
+                        Log.w("WifiRepository", "Error unregistering network callback: ${e.message}")
+                    }
+                    callback(true)
+                }
+            }
+            
+            override fun onLost(network: Network) {
+                super.onLost(network)
+                Log.d("WifiRepository", "Network lost")
+            }
+        }
+        
+        val request = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+            .build()
+        
+        connectivityManager.registerNetworkCallback(request, networkCallback)
+        
+        // Set timeout
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (!callbackInvoked) {
+                callbackInvoked = true
+                try {
+                    connectivityManager.unregisterNetworkCallback(networkCallback)
+                } catch (e: Exception) {
+                    Log.w("WifiRepository", "Error unregistering timeout callback: ${e.message}")
+                }
+                Log.d("WifiRepository", "Internet connectivity wait timeout")
+                callback(false)
+            }
+        }, timeoutMs)
     }
 
     // Clean up when repository is no longer needed
