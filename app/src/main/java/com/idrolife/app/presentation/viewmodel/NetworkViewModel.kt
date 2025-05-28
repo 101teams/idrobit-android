@@ -116,6 +116,10 @@ class NetworkViewModel @Inject constructor(
         return wifiRepository.getCurrentWifiInfo()
     }
 
+    fun getDetailedWifiInfo(): Triple<String?, Int?, String?> {
+        return wifiRepository.getDetailedWifiInfo()
+    }
+
     fun reconnectToWifi(ssid: String, callback: (Boolean) -> Unit) {
         wifiRepository.reconnectToWifi(ssid, callback)
     }

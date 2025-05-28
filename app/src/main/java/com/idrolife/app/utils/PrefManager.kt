@@ -4,6 +4,32 @@ import android.content.Context
 import com.google.gson.Gson
 import com.idrolife.app.data.api.auth.User
 
+enum class NetworkType {
+    WIFI,
+    MOBILE_DATA,
+    UNKNOWN
+}
+
+data class OriginalNetworkInfo(
+    val ssid: String?,
+    val networkType: NetworkType,
+    val signalStrength: Int?,
+    val securityType: String?,
+    val frequency: Int?,
+    val bssid: String?,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+enum class RestorationStep {
+    DISCONNECTING_CURRENT,
+    REMOVING_TEMPORARY,
+    CONNECTING_TO_ORIGINAL,
+    WAITING_FOR_CONNECTION,
+    VERIFYING_INTERNET,
+    COMPLETED,
+    FAILED
+}
+
 class PrefManager(
     context: Context
 ) {
@@ -83,5 +109,39 @@ class PrefManager(
     fun getPreviousWifi(): String? {
         val ssid = getData("previous_wifi_ssid", "")
         return if (ssid.isEmpty()) null else ssid
+    }
+
+    fun saveOriginalNetworkInfo(networkInfo: OriginalNetworkInfo) {
+        val json = Gson().toJson(networkInfo)
+        saveData("original_network_info", json)
+    }
+
+    fun getOriginalNetworkInfo(): OriginalNetworkInfo? {
+        val json = getData("original_network_info", "")
+        return if (json.isEmpty()) {
+            null
+        } else {
+            try {
+                Gson().fromJson(json, OriginalNetworkInfo::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
+    fun clearOriginalNetworkInfo() {
+        val editor = sharedPreferences.edit()
+        editor.remove("original_network_info")
+        editor.apply()
+    }
+
+    fun getLastRestorationAttempt(): Long {
+        return sharedPreferences.getLong("last_restoration_attempt", 0)
+    }
+
+    fun setLastRestorationAttempt(timestamp: Long) {
+        val editor = sharedPreferences.edit()
+        editor.putLong("last_restoration_attempt", timestamp)
+        editor.apply()
     }
 }

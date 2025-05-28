@@ -348,6 +348,137 @@ class WifiRepositoryImpl @Inject constructor(
         }, timeoutMs)
     }
 
+    override fun disconnectCurrentWifi(callback: (Boolean) -> Unit) {
+        Log.d("WifiRepository", "Disconnecting current WiFi connection")
+        
+        try {
+            // Clear any existing network binding first
+            activeNetworkCallback?.let {
+                try {
+                    connectivityManager.unregisterNetworkCallback(it)
+                    connectivityManager.bindProcessToNetwork(null)
+                    Log.d("WifiRepository", "Cleared existing network binding")
+                } catch (e: Exception) {
+                    Log.w("WifiRepository", "Error clearing network binding: ${e.message}")
+                }
+                activeNetworkCallback = null
+            }
+            
+            // Disconnect from current network
+            val success = wifiManager.disconnect()
+            Log.d("WifiRepository", "WiFi disconnect result: $success")
+            
+            // Wait a moment for disconnection to complete
+            Handler(Looper.getMainLooper()).postDelayed({
+                callback(success)
+            }, 1000)
+            
+        } catch (e: Exception) {
+            Log.e("WifiRepository", "Error disconnecting WiFi: ${e.message}")
+            callback(false)
+        }
+    }
+
+    override fun removeTemporaryNetwork(ssid: String, callback: (Boolean) -> Unit) {
+        Log.d("WifiRepository", "Removing temporary network: $ssid")
+        
+        try {
+            val configuredNetworks = wifiManager.configuredNetworks
+            val targetNetwork = configuredNetworks?.find { 
+                it.SSID.replace("\"", "") == ssid 
+            }
+            
+            if (targetNetwork != null) {
+                val removed = wifiManager.removeNetwork(targetNetwork.networkId)
+                val saved = if (removed) wifiManager.saveConfiguration() else false
+                Log.d("WifiRepository", "Network $ssid removal: removed=$removed, saved=$saved")
+                callback(removed && saved)
+            } else {
+                Log.d("WifiRepository", "Network $ssid not found in configured networks")
+                callback(true) // Consider it success if network isn't there
+            }
+        } catch (e: Exception) {
+            Log.e("WifiRepository", "Error removing network $ssid: ${e.message}")
+            callback(false)
+        }
+    }
+
+    override fun getDetailedWifiInfo(): Triple<String?, Int?, String?> {
+        val info = wifiManager.connectionInfo
+        val ssid = info?.ssid?.replace("\"", "")
+        val signalStrength = info?.rssi
+        val bssid = info?.bssid
+        Log.d("WifiRepository", "Detailed WiFi info - SSID: $ssid, Signal: $signalStrength, BSSID: $bssid")
+        return Triple(ssid, signalStrength, bssid)
+    }
+
+    override fun connectToWifiWithValidation(
+        ssid: String, 
+        password: String?, 
+        timeoutMs: Long, 
+        callback: (Boolean) -> Unit
+    ) {
+        Log.d("WifiRepository", "Connecting to $ssid with validation, timeout: ${timeoutMs}ms")
+        
+        var callbackInvoked = false
+        val startTime = System.currentTimeMillis()
+        
+        // First attempt connection
+        connectToWifi(ssid, password) { connectionSuccess ->
+            if (!connectionSuccess) {
+                Log.d("WifiRepository", "Initial connection to $ssid failed")
+                if (!callbackInvoked) {
+                    callbackInvoked = true
+                    callback(false)
+                }
+                return@connectToWifi
+            }
+            
+            Log.d("WifiRepository", "Connection to $ssid succeeded, validating...")
+            
+            // Validate connection with timeout
+            val validateConnection = object : Runnable {
+                override fun run() {
+                    if (callbackInvoked) return
+                    
+                    val currentSsid = getCurrentWifiInfo().first
+                    val isCorrectNetwork = currentSsid == ssid
+                    val hasInternet = isInternetAvailable()
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    
+                    Log.d("WifiRepository", "Validation check - Current: $currentSsid, Target: $ssid, Internet: $hasInternet, Elapsed: ${elapsedTime}ms")
+                    
+                    if (isCorrectNetwork && hasInternet) {
+                        Log.d("WifiRepository", "Connection to $ssid validated successfully")
+                        if (!callbackInvoked) {
+                            callbackInvoked = true
+                            callback(true)
+                        }
+                    } else if (elapsedTime >= timeoutMs) {
+                        Log.d("WifiRepository", "Connection validation timeout for $ssid")
+                        if (!callbackInvoked) {
+                            callbackInvoked = true
+                            callback(false)
+                        }
+                    } else {
+                        // Check again in 1 second
+                        Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+                    }
+                }
+            }
+            
+            // Start validation checks
+            Handler(Looper.getMainLooper()).postDelayed(validateConnection, 1000)
+        }
+    }
+
+    override fun isConnectedToSpecificNetwork(ssid: String): Boolean {
+        val currentSsid = getCurrentWifiInfo().first
+        val isConnected = currentSsid == ssid
+        Log.d("WifiRepository", "Checking if connected to $ssid: current=$currentSsid, result=$isConnected")
+        return isConnected
+    }
+
     // Clean up when repository is no longer needed
     fun cleanup() {
         unregisterReceiver()

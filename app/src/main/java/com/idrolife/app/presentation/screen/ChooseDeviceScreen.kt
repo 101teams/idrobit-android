@@ -15,6 +15,8 @@ import com.idrolife.app.R
 import com.idrolife.app.navigation.Screen
 import com.idrolife.app.presentation.viewmodel.NetworkViewModel
 import com.idrolife.app.utils.PrefManager
+import com.idrolife.app.utils.OriginalNetworkInfo
+import com.idrolife.app.utils.NetworkType
 
 @Composable
 fun ChooseDeviceScreen(navController: NavController) {
@@ -30,11 +32,34 @@ fun ChooseDeviceScreen(navController: NavController) {
         connectingToSsid = connectingToSsid,
         networkNameFilter = if (BuildConfig.DEBUG) "" else "IL_"
     ) {
-        // Save current WiFi before connecting to IoT device
-        val (currentSsid, _) = viewModel.getCurrentWifiInfo()
-        // Handle cases where currentSsid might be null or contain quotes
-        val cleanSsid = currentSsid?.replace("\"", "")?.takeIf { it.isNotEmpty() } ?: "MOBILE_DATA"
-        prefManager.setPreviousWifi(cleanSsid)
+        // Save detailed current network info before connecting to IoT device
+        val (currentSsid, signalStrength, bssid) = viewModel.getDetailedWifiInfo()
+        val cleanSsid = currentSsid?.replace("\"", "")?.takeIf { it.isNotEmpty() }
+        
+        val networkInfo = if (cleanSsid != null) {
+            OriginalNetworkInfo(
+                ssid = cleanSsid,
+                networkType = NetworkType.WIFI,
+                signalStrength = signalStrength,
+                securityType = null, // Could be enhanced to detect security type
+                frequency = null, // Could be enhanced to get frequency
+                bssid = bssid
+            )
+        } else {
+            OriginalNetworkInfo(
+                ssid = null,
+                networkType = NetworkType.MOBILE_DATA,
+                signalStrength = null,
+                securityType = null,
+                frequency = null,
+                bssid = null
+            )
+        }
+        
+        prefManager.saveOriginalNetworkInfo(networkInfo)
+        // Keep the old method for backward compatibility
+        prefManager.setPreviousWifi(cleanSsid ?: "MOBILE_DATA")
+        
         connectingToSsid = it.SSID
         viewModel.connectToWifi(it.SSID, password) { success ->
             if (success) {

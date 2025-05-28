@@ -45,7 +45,7 @@ import com.idrolife.app.presentation.viewmodel.NetworkViewModel
 import com.idrolife.app.theme.Black
 import com.idrolife.app.theme.Primary2
 import com.idrolife.app.theme.White
-import com.idrolife.app.utils.PrefManager
+import com.idrolife.app.utils.RestorationStep
 
 @Composable
 fun NetworkSetupScreen(
@@ -118,32 +118,96 @@ fun NetworkSetupScreen(
                 ) {
                     CircularProgressIndicator(color = Primary2)
                     Spacer(modifier = Modifier.height(16.dp))
+                    
+                    val loadingText = when {
+                        uiState.isRestoring -> {
+                            uiState.restorationProgress ?: getRestorationStepText(uiState.restorationStep)
+                        }
+                        else -> "Configuring device..."
+                    }
+                    
                     Text(
-                        text = if (uiState.isRestoring) "Restoring network connection..." else "Configuring device...",
+                        text = loadingText,
                         style = MaterialTheme.typography.body2,
                         color = Black
                     )
+                    
+                    // Show restoration step indicator
+                    if (uiState.isRestoring && uiState.restorationStep != null) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Step ${getStepNumber(uiState.restorationStep)} of 5",
+                            style = MaterialTheme.typography.caption,
+                            color = Color.Gray
+                        )
+                    }
                 }
             }
         }
 
         if (uiState.error != null) {
-            ErrorDialog(
-                confirmText = if (isReconnectError) "OK" else "Retry",
+            EnhancedErrorDialog(
                 errorMessage = uiState.error ?: "",
-                onConfirm = {
-                    if (isReconnectError) {
-                        navController.navigate(Screen.Main.route) {
-                            popUpTo(Screen.Main.route) { inclusive = true }
-                        }
-                    } else {
-                        viewModel.configureNetwork(password.value)
+                isRestorationError = isReconnectError || uiState.restorationStep == RestorationStep.FAILED,
+                onRetry = { viewModel.configureNetwork(password.value) },
+                onRestoreRetry = { viewModel.restorePreviousNetwork(navController) },
+                onNavigateToMain = {
+                    navController.navigate(Screen.Main.route) {
+                        popUpTo(Screen.Main.route) { inclusive = true }
                     }
                 },
                 onDismiss = { viewModel.clearError() }
             )
         }
     }
+}
+
+@Composable
+fun EnhancedErrorDialog(
+    errorMessage: String,
+    isRestorationError: Boolean,
+    onRetry: () -> Unit,
+    onRestoreRetry: () -> Unit,
+    onNavigateToMain: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = if (isRestorationError) { {} } else onDismiss,
+        title = { 
+            Text(if (isRestorationError) "Network Restoration Failed" else "Configuration Error") 
+        },
+        text = { 
+            Column {
+                Text(errorMessage)
+                if (isRestorationError) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "The automatic network restoration process was unable to restore your connection. Please check your network settings manually.",
+                        style = MaterialTheme.typography.caption,
+                        color = Color.Gray
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (isRestorationError) {
+                TextButton(onClick = onNavigateToMain) {
+                    Text("Go to Main Screen", color = Primary2)
+                }
+            } else {
+                TextButton(onClick = onRetry) {
+                    Text("Retry", color = Primary2)
+                }
+            }
+        },
+        dismissButton = {
+            if (!isRestorationError) {
+                TextButton(onClick = onDismiss) {
+                    Text("Cancel", color = Color.Gray)
+                }
+            }
+        }
+    )
 }
 
 @Composable
@@ -168,4 +232,31 @@ fun ErrorDialog(
             }
         }
     )
+}
+
+@Composable
+private fun getRestorationStepText(step: RestorationStep?): String {
+    return when (step) {
+        RestorationStep.DISCONNECTING_CURRENT -> "Disconnecting from IoT device..."
+        RestorationStep.REMOVING_TEMPORARY -> "Cleaning up temporary connections..."
+        RestorationStep.CONNECTING_TO_ORIGINAL -> "Reconnecting to your network..."
+        RestorationStep.WAITING_FOR_CONNECTION -> "Waiting for connection..."
+        RestorationStep.VERIFYING_INTERNET -> "Verifying internet connection..."
+        RestorationStep.COMPLETED -> "Restoration completed"
+        RestorationStep.FAILED -> "Restoration failed"
+        null -> "Restoring network connection..."
+    }
+}
+
+private fun getStepNumber(step: RestorationStep?): Int {
+    return when (step) {
+        RestorationStep.DISCONNECTING_CURRENT -> 1
+        RestorationStep.REMOVING_TEMPORARY -> 2
+        RestorationStep.CONNECTING_TO_ORIGINAL -> 3
+        RestorationStep.WAITING_FOR_CONNECTION -> 4
+        RestorationStep.VERIFYING_INTERNET -> 5
+        RestorationStep.COMPLETED -> 5
+        RestorationStep.FAILED -> 5
+        null -> 1
+    }
 }
